@@ -80,7 +80,7 @@ public class ComponentDetailController implements Initializable {
                     saveComponentButton.setVisible(false);
                     updateView(this.component);
                     mainViewController.renameTab("Neue Komponente", component.getIdentifier());
-                    errorField.setStyle("-fx-text-fill: green; -fx-font-size: 14px;");
+                    errorField.setStyle("-fx-text-fill: greenyellow; -fx-font-size: 14px;");
                     errorField.setText("Einfügen erfolgreich! (" + LocalDateTime.now() + ")");
                 } catch (SQLException sql) {
                     errorField.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
@@ -91,7 +91,7 @@ public class ComponentDetailController implements Initializable {
                     component = componentRepository.updateComponent(component, ident, number, amount);
                     saveComponentButton.setVisible(false);
                     updateView(this.component);
-                    errorField.setStyle("-fx-text-fill: green; -fx-font-size: 14px;");
+                    errorField.setStyle("-fx-text-fill: greenyellow; -fx-font-size: 14px;");
                     errorField.setText("Änderung erfolgreich! (" + LocalDateTime.now() + ")" );
                 } catch (SQLException sql) {
                     errorField.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");

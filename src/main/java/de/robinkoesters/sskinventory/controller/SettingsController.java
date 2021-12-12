@@ -57,8 +57,8 @@ public class SettingsController implements Initializable {
             errorField.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
             errorField.setText("Fehler beim Zurücksetzen: " + e.getMessage());
         }
-        errorField.setStyle("-fx-text-fill: green; -fx-font-size: 14px;");
-        errorField.setText("Datenbank erfolreich zurückgesetzt!");
+        errorField.setStyle("-fx-text-fill: greenyellow; -fx-font-size: 14px;");
+        errorField.setText("Datenbank erfolgreich zurückgesetzt!");
     }
 
     @FXML

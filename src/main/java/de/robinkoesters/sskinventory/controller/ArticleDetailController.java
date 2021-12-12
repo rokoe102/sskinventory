@@ -136,8 +136,8 @@ public class ArticleDetailController implements Initializable {
                     saveArticleButton.setVisible(false);
                     updateView(this.article);
 
-                    errorField.setStyle("-fx-text-fill: green; -fx-font-size: 14px;");
-                    errorField.setText("Änderung erfolreich!");
+                    errorField.setStyle("-fx-text-fill: greenyellow; -fx-font-size: 14px;");
+                    errorField.setText("Änderung erfolgreich!");
                 } catch (SQLException sql) {
                     errorField.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
                     errorField.setText("Änderung fehlgeschlagen: " + sql.getMessage());
