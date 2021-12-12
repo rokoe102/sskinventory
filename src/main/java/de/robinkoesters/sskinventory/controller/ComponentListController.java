@@ -1,0 +1,87 @@
+package de.robinkoesters.sskinventory.controller;
+
+import de.robinkoesters.sskinventory.entity.Component;
+import de.robinkoesters.sskinventory.repository.ComponentRepository;
+import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+
+import java.io.IOException;
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
+
+public class ComponentListController implements Initializable {
+
+    private MainViewController mainViewController;
+    private ComponentRepository repo;
+
+    @FXML
+    private ListView<Component> componentList;
+    @FXML private Button addButton;
+    @FXML private Button deleteButton;
+    @FXML private TextField errorField;
+
+    public void setMainViewController(MainViewController mainViewController) {
+        this.mainViewController = mainViewController;
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        updateView();
+        defineDoubleClickEvent();
+    }
+
+    public void updateView() {
+        repo = new ComponentRepository();
+        try {
+            ObservableList<Component> data = repo.findAllComponents();
+            componentList.getItems().setAll(data);
+            System.out.println("updated component list data");
+        }
+        catch(SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void defineDoubleClickEvent() {
+        componentList.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent click) {
+                if (click.getClickCount() == 2) {
+                    Component current = componentList.getSelectionModel().getSelectedItem();
+                    if (current != null && !mainViewController.isTabAlreadyOpen(current.getIdentifier())) {
+                        try {
+                            mainViewController.createComponentDetailTab(current);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    @FXML
+    public void onAddition() throws IOException {
+        mainViewController.createNewComponentDetailTab();
+    }
+
+    @FXML
+    public void onDeletion() {
+        Component selection = componentList.getSelectionModel().getSelectedItem();
+        if (selection != null) {
+            try {
+                repo.deleteComponent(selection);
+                updateView();
+            } catch (SQLException e) {
+                errorField.setText(e.getMessage());
+            }
+        }
+    }
+}

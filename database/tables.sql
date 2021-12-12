@@ -1,0 +1,21 @@
+CREATE TABLE ARTICLE
+(
+    identifier TEXT PRIMARY KEY NOT NULL
+);
+
+CREATE TABLE COMPONENT
+(
+    identifier TEXT PRIMARY KEY NOT NULL,
+    number INT,
+    amount INT NOT NULL
+);
+
+CREATE TABLE ASSIGNMENT
+(
+    article TEXT NOT NULL,
+    component TEXT NOT NULL,
+    amount INT NOT NULL,
+    FOREIGN KEY (article) REFERENCES ARTICLE(identifier) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (component) REFERENCES COMPONENT(identifier) ON DELETE CASCADE ON UPDATE CASCADE,
+    PRIMARY KEY(article, component)
+);
