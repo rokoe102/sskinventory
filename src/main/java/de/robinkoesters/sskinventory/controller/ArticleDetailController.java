@@ -117,11 +117,14 @@ public class ArticleDetailController implements Initializable {
         if (componentBox.getSelectionModel().getSelectedItem() != null) {
             try {
                 int amount = Integer.parseInt(amountField.getText());
+                if (amount < 1) {
+                    throw new IllegalArgumentException();
+                }
                 componentRepository.createNewAssignment(article, componentBox.getSelectionModel().getSelectedItem(), amount);
                 updateView(this.article);
                 hideSaveDialog();
-            } catch (NumberFormatException nfe) {
-                errorField.setText("Bitte eine natürliche Zahl als Menge eingeben!");
+            } catch (IllegalArgumentException nfe) {
+                errorField.setText("Bitte eine natürliche Zahl größer 0 als Menge eingeben!");
             } catch (SQLException sql) {
                 errorField.setText("Speichern fehlgeschlagen: " + sql.getMessage());
             }
