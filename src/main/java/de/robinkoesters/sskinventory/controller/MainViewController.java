@@ -74,6 +74,15 @@ public class MainViewController {
         articleDetailController.setMainViewController(this);
         articleDetailController.updateView(article);
 
+        tab.setOnSelectionChanged(new EventHandler<Event>() {
+            @Override
+            public void handle(Event t) {
+                if (tab.isSelected()) {
+                    articleDetailController.updateView(null);
+                }
+            }
+        });
+
         tab.setContent(root);
         tab.setClosable(true);
         tabPane.getTabs().add(tab);

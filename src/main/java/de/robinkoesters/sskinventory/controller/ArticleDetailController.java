@@ -48,8 +48,10 @@ public class ArticleDetailController implements Initializable {
         saveButton.setVisible(false);
     }
 
-    public void updateView(Article article) {
-        this.article = article;
+    public void updateView(Article updated) {
+        if (updated != null) {
+            this.article = updated;
+        }
         this.identifierField.setText(article.getIdentifier());
 
         if (article.isNewEntity()) {
