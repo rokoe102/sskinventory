@@ -26,7 +26,7 @@
       <Button fx:id="deleteButton" layoutX="251.0" layoutY="175.0" mnemonicParsing="false" onAction="#handleDeletion" prefHeight="25.0" prefWidth="25.0" text="-" />
       <ComboBox fx:id="componentBox" layoutX="291.0" layoutY="140.0" prefHeight="25.0" prefWidth="149.0" />
       <Button fx:id="saveButton" layoutX="517.0" layoutY="140.0" mnemonicParsing="false" onAction="#handleAssignmentSave" text="Speichern" />
-      <TextField fx:id="amountField" layoutX="451.0" layoutY="140.0" prefHeight="25.0" prefWidth="58.0" />
+      <TextField fx:id="amountField" layoutX="451.0" layoutY="140.0" prefHeight="25.0" prefWidth="58.0" promptText="Menge" />
       <TextField fx:id="errorField" layoutX="38.0" layoutY="355.0" prefHeight="25.0" prefWidth="545.0" />
       <Button fx:id="saveArticleButton" layoutX="459.0" layoutY="31.0" mnemonicParsing="false" onAction="#handleArticleUpdate" text="Speichern" />
    </children>
