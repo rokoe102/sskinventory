@@ -32,6 +32,7 @@ public class AvailabilityRepository extends Repository {
                 }
                 isAvailable = true;
             } else {
+                result = 0;
                 isAvailable = false;
                 break;
             }
