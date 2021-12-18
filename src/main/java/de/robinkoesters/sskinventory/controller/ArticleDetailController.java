@@ -1,17 +1,21 @@
 package de.robinkoesters.sskinventory.controller;
 
 import de.robinkoesters.sskinventory.entity.Article;
+import de.robinkoesters.sskinventory.entity.Component;
 import de.robinkoesters.sskinventory.entity.ComponentAssignment;
 import de.robinkoesters.sskinventory.repository.ArticleRepository;
 import de.robinkoesters.sskinventory.repository.ComponentRepository;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -39,6 +43,7 @@ public class ArticleDetailController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        defineDoubleClickEvent();
         this.componentRepository = new ComponentRepository();
         this.articleRepository = new ArticleRepository();
 
@@ -46,6 +51,30 @@ public class ArticleDetailController implements Initializable {
         componentBox.setVisible(false);
         amountField.setVisible(false);
         saveButton.setVisible(false);
+    }
+
+    private void defineDoubleClickEvent() {
+        assignmentList.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent click) {
+                if (click.getClickCount() == 2) {
+                    String currentComponent = assignmentList.getSelectionModel().getSelectedItem().getComponent();
+                    Component current = null;
+                    try {
+                        current = componentRepository.findComponentByIdentifier(currentComponent);
+                    } catch (SQLException sql) {
+                        errorField.setText("Laden fehlgeschlagen: " + sql.getMessage());
+                    }
+                    if (current != null && !mainViewController.isTabAlreadyOpen(current.getIdentifier())) {
+                        try {
+                            mainViewController.createComponentDetailTab(current);
+                        } catch (IOException e) {
+                            errorField.setText("Laden fehlgeschlagen: " + e.getMessage());
+                        }
+                    }
+                }
+            }
+        });
     }
 
     public void updateView(Article updated) {

@@ -64,6 +64,17 @@ public class ComponentRepository extends Repository {
         return list;
     }
 
+    public Component findComponentByIdentifier(String identifier) throws SQLException {
+        PreparedStatement stmnt = conn.prepareStatement("SELECT * FROM COMPONENT c where c.identifier = ?");
+        stmnt.setString(1, identifier);
+        ResultSet rs = stmnt.executeQuery();
+        if (rs.next()) {
+            return new Component(rs.getString("identifier"), rs.getInt("number"), rs.getInt("amount"));
+        } else {
+            return null;
+        }
+    }
+
     public ObservableList<Component> findAllComponents() throws SQLException {
         ObservableList<Component> list = FXCollections.observableArrayList();
         PreparedStatement stmnt = conn.prepareStatement("SELECT * FROM COMPONENT");
