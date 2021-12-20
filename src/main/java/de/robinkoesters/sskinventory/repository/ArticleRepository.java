@@ -16,7 +16,19 @@ public class ArticleRepository extends Repository {
 
     public ObservableList<Article> findAllArticles() throws SQLException {
         ObservableList<Article> list = FXCollections.observableArrayList();
-        PreparedStatement stmnt = conn.prepareStatement("SELECT * FROM ARTICLE a");
+        PreparedStatement stmnt = conn.prepareStatement("SELECT * FROM ARTICLE a ORDER BY identifier");
+        ResultSet rs = stmnt.executeQuery();
+        while(rs.next()) {
+            list.add(new Article(rs.getString("identifier")));
+        }
+        rs.close();
+        return list;
+    }
+
+    public ObservableList<Article> findArticlesWithFilter(String searchString) throws SQLException {
+        ObservableList<Article> list = FXCollections.observableArrayList();
+        PreparedStatement stmnt = conn.prepareStatement("SELECT * FROM ARTICLE a WHERE LOWER(identifier) LIKE ? ORDER BY identifier");
+        stmnt.setString(1, "%" + searchString.toLowerCase() + "%");
         ResultSet rs = stmnt.executeQuery();
         while(rs.next()) {
             list.add(new Article(rs.getString("identifier")));

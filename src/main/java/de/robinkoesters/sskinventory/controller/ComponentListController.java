@@ -21,11 +21,12 @@ public class ComponentListController implements Initializable {
     private MainViewController mainViewController;
     private ComponentRepository repo;
 
-    @FXML
-    private ListView<Component> componentList;
+    @FXML private ListView<Component> componentList;
     @FXML private Button addButton;
     @FXML private Button deleteButton;
+    @FXML private Button searchButton;
     @FXML private TextField errorField;
+    @FXML private TextField searchField;
 
     public void setMainViewController(MainViewController mainViewController) {
         this.mainViewController = mainViewController;
@@ -39,13 +40,20 @@ public class ComponentListController implements Initializable {
 
     public void updateView() {
         repo = new ComponentRepository();
-        try {
-            ObservableList<Component> data = repo.findAllComponents();
-            componentList.getItems().setAll(data);
-            System.out.println("updated component list data");
-        }
-        catch(SQLException e) {
-            System.out.println(e.getMessage());
+        if (searchField.getText() != null && !searchField.getText().equals("")) {
+            try {
+                componentList.getItems().setAll(repo.findComponentsWithFilter(searchField.getText()));
+            } catch (SQLException e) {
+                errorField.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
+                errorField.setText(e.getMessage());
+            }
+        } else {
+            try {
+                componentList.getItems().setAll(repo.findAllComponents());
+            } catch (SQLException e) {
+                errorField.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
+                errorField.setText(e.getMessage());
+            }
         }
     }
 
@@ -59,7 +67,8 @@ public class ComponentListController implements Initializable {
                         try {
                             mainViewController.createComponentDetailTab(current);
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            errorField.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
+                            errorField.setText(e.getMessage());
                         }
                     }
                 }
@@ -83,5 +92,10 @@ public class ComponentListController implements Initializable {
                 errorField.setText(e.getMessage());
             }
         }
+    }
+
+    @FXML
+    public void onSearch() {
+        updateView();
     }
 }

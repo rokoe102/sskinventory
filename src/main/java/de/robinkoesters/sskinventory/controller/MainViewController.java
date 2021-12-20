@@ -55,7 +55,7 @@ public class MainViewController {
             @Override
             public void handle(Event t) {
                 if (tab.isSelected()) {
-                    article.updateListData();
+                    article.updateView();
                 }
             }
         });

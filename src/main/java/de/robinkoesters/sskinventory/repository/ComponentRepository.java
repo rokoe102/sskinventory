@@ -20,7 +20,7 @@ public class ComponentRepository extends Repository {
     public ObservableList<ComponentAssignment> findComponentAssignmentsFor(Article article) {
         ObservableList<ComponentAssignment> list = FXCollections.observableArrayList();
         try {
-            PreparedStatement stmnt = conn.prepareStatement("SELECT * FROM ASSIGNMENT a WHERE a.article = ?");
+            PreparedStatement stmnt = conn.prepareStatement("SELECT * FROM ASSIGNMENT a WHERE a.article = ? ORDER BY component");
             stmnt.setString(1, article.getIdentifier());
             ResultSet rs = stmnt.executeQuery();
             while (rs.next()) {
@@ -52,7 +52,7 @@ public class ComponentRepository extends Repository {
     public ObservableList<String> findAllComponentRefs() {
         ObservableList<String> list = FXCollections.observableArrayList();
         try {
-            PreparedStatement stmnt = conn.prepareStatement("SELECT * FROM COMPONENT");
+            PreparedStatement stmnt = conn.prepareStatement("SELECT * FROM COMPONENT ORDER BY identifier");
             ResultSet rs = stmnt.executeQuery();
             while (rs.next()) {
                 list.add(rs.getString("identifier"));
@@ -77,7 +77,20 @@ public class ComponentRepository extends Repository {
 
     public ObservableList<Component> findAllComponents() throws SQLException {
         ObservableList<Component> list = FXCollections.observableArrayList();
-        PreparedStatement stmnt = conn.prepareStatement("SELECT * FROM COMPONENT");
+        PreparedStatement stmnt = conn.prepareStatement("SELECT * FROM COMPONENT ORDER BY identifier");
+        ResultSet rs = stmnt.executeQuery();
+        while (rs.next()) {
+            list.add(new Component(rs.getString("identifier"), rs.getInt("number"), rs.getInt("amount")));
+        }
+        rs.close();
+
+        return list;
+    }
+
+    public ObservableList<Component> findComponentsWithFilter(String searchString) throws SQLException {
+        ObservableList<Component> list = FXCollections.observableArrayList();
+        PreparedStatement stmnt = conn.prepareStatement("SELECT * FROM COMPONENT c where LOWER(c.identifier) LIKE ?");
+        stmnt.setString(1, "%" + searchString.toLowerCase() + "%");
         ResultSet rs = stmnt.executeQuery();
         while (rs.next()) {
             list.add(new Component(rs.getString("identifier"), rs.getInt("number"), rs.getInt("amount")));

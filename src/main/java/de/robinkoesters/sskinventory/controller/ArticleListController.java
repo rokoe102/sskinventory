@@ -2,12 +2,10 @@ package de.robinkoesters.sskinventory.controller;
 
 import de.robinkoesters.sskinventory.entity.Article;
 import de.robinkoesters.sskinventory.repository.ArticleRepository;
-import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
@@ -23,7 +21,9 @@ public class ArticleListController implements Initializable {
     @FXML private ListView<Article> articleList;
     @FXML private Button addButton;
     @FXML private Button deleteButton;
+    @FXML private Button searchButton;
     @FXML private TextField errorField;
+    @FXML private TextField searchField;
 
     public void setMainViewController(MainViewController mainViewController) {
         this.mainViewController = mainViewController;
@@ -33,16 +33,25 @@ public class ArticleListController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         repo = new ArticleRepository();
         defineDoubleClickEvent();
-        updateListData();
+        updateView();
     }
 
-    public void updateListData() {
-        try {
-            ObservableList<Article> data = repo.findAllArticles();
-            articleList.getItems().setAll(data);
-        }
-        catch(SQLException e) {
-            System.out.println(e.getMessage());
+    public void updateView() {
+        repo = new ArticleRepository();
+        if (searchField.getText() != null && !searchField.getText().equals("")) {
+            try {
+                articleList.getItems().setAll(repo.findArticlesWithFilter(searchField.getText()));
+            } catch (SQLException e) {
+                errorField.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
+                errorField.setText(e.getMessage());
+            }
+        } else {
+            try {
+                articleList.getItems().setAll(repo.findAllArticles());
+            } catch (SQLException e) {
+                errorField.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
+                errorField.setText(e.getMessage());
+            }
         }
     }
 
@@ -75,10 +84,15 @@ public class ArticleListController implements Initializable {
         if (selection != null) {
             try {
                 repo.deleteArticle(selection);
-                updateListData();
+                updateView();
             } catch (SQLException e) {
                 errorField.setText(e.getMessage());
             }
         }
+    }
+
+    @FXML
+    public void onSearch() {
+        updateView();
     }
 }
