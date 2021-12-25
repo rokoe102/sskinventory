@@ -23,8 +23,9 @@ public class MainViewController {
             createWelcomingTab();
             createArticleListTab();
             createComponentListTab();
-            createAvailabilityTab();
+            createDeliveryTab();
             createSubmissionTab();
+            createAvailabilityTab();
             createSettingsTab();
         }
 
@@ -179,7 +180,7 @@ public class MainViewController {
     }
 
     public void createSubmissionTab() throws IOException {
-        Tab tab = new Tab("Änderungen");
+        Tab tab = new Tab("Auslieferung");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Submission.fxml"));
         Parent root = loader.load();
 
@@ -191,6 +192,28 @@ public class MainViewController {
             public void handle(Event t) {
                 if (tab.isSelected()) {
                     submissionController.updateView();
+                }
+            }
+        });
+
+        tab.setContent(root);
+        tab.setClosable(false);
+        tabPane.getTabs().add(tab);
+    }
+
+    public void createDeliveryTab() throws IOException {
+        Tab tab = new Tab("Anlieferung");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Delivery.fxml"));
+        Parent root = loader.load();
+
+        DeliveryController deliveryController = loader.getController();
+        deliveryController.setMainViewController(this);
+
+        tab.setOnSelectionChanged(new EventHandler<Event>() {
+            @Override
+            public void handle(Event t) {
+                if (tab.isSelected()) {
+                    deliveryController.updateView();
                 }
             }
         });

@@ -11,7 +11,7 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.robinkoesters.sskinventory.controller.SubmissionController">
    <children>
       <TextField fx:id="errorField" layoutX="28.0" layoutY="354.0" prefHeight="25.0" prefWidth="545.0" />
-      <Label layoutX="257.0" layoutY="27.0" text="Änderung">
+      <Label layoutX="244.0" layoutY="25.0" text="Auslieferung">
          <font>
             <Font size="20.0" />
          </font>
