@@ -104,7 +104,7 @@ public class ComponentListController implements Initializable {
     public void onExcelExportPerformed() {
         if (!componentList.getItems().isEmpty()) {
             try {
-                ComponentExcelExport.exportComponents();
+                ComponentExcelExport.exportAllComponents();
             } catch (Exception e) {
                 errorField.setText(e.getMessage());
             }

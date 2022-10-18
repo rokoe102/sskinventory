@@ -3,6 +3,7 @@ package de.robinkoesters.sskinventory.controller;
 import de.robinkoesters.sskinventory.entity.Article;
 import de.robinkoesters.sskinventory.entity.Component;
 import de.robinkoesters.sskinventory.entity.ComponentAssignment;
+import de.robinkoesters.sskinventory.export.ComponentExcelExport;
 import de.robinkoesters.sskinventory.repository.ArticleRepository;
 import de.robinkoesters.sskinventory.repository.ComponentRepository;
 import javafx.collections.ObservableList;
@@ -36,6 +37,7 @@ public class ArticleDetailController implements Initializable {
     @FXML private Button deleteButton;
     @FXML private Button saveButton;
     @FXML private TextField errorField;
+    @FXML private Button excelExportButton;
 
     public void setMainViewController(MainViewController mainViewController) {
         this.mainViewController = mainViewController;
@@ -203,6 +205,17 @@ public class ArticleDetailController implements Initializable {
         componentBox.setVisible(false);
         amountField.setVisible(false);
         saveButton.setVisible(false);
+    }
+
+    @FXML
+    public void onExcelExportPerformed() {
+        if (!assignmentList.getItems().isEmpty()) {
+            try {
+                ComponentExcelExport.exportComponentsForArticle(article);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
 }

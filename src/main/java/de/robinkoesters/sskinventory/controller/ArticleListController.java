@@ -1,6 +1,7 @@
 package de.robinkoesters.sskinventory.controller;
 
 import de.robinkoesters.sskinventory.entity.Article;
+import de.robinkoesters.sskinventory.export.ComponentExcelExport;
 import de.robinkoesters.sskinventory.repository.ArticleRepository;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;

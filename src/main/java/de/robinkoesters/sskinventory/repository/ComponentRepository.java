@@ -9,6 +9,8 @@ import javafx.collections.ObservableList;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ComponentRepository extends Repository {
 
@@ -25,6 +27,24 @@ public class ComponentRepository extends Repository {
             ResultSet rs = stmnt.executeQuery();
             while (rs.next()) {
                 list.add(new ComponentAssignment(article, rs.getString("component"), rs.getInt("amount")));
+            }
+            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<Component> findComponentsAssignedToArticle(Article article) {
+        List<Component> list = new ArrayList<>();
+        try {
+            PreparedStatement stmnt = conn.prepareStatement("SELECT c.* FROM ASSIGNMENT a " +
+                                                                "           JOIN COMPONENT c on a.component = c.identifier " +
+                                                                "           WHERE a.article = ? ORDER BY c.amount ASC");
+            stmnt.setString(1, article.getIdentifier());
+            ResultSet rs = stmnt.executeQuery();
+            while (rs.next()) {
+                list.add(new Component(rs.getString("identifier"), 0, rs.getInt("amount")));
             }
             rs.close();
         } catch (SQLException e) {

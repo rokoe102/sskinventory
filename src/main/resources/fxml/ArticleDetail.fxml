@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.robinkoesters.sskinventory.controller.ArticleDetailController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.robinkoesters.sskinventory.controller.ArticleDetailController">
    <children>
       <TextField fx:id="identifierField" layoutX="291.0" layoutY="31.0" onKeyTyped="#handleTyping" />
       <Label layoutX="140.0" layoutY="30.0" text="Bezeichnung">
@@ -29,5 +29,6 @@
       <TextField fx:id="amountField" layoutX="451.0" layoutY="140.0" prefHeight="25.0" prefWidth="58.0" promptText="Menge" />
       <TextField fx:id="errorField" layoutX="38.0" layoutY="355.0" prefHeight="25.0" prefWidth="545.0" />
       <Button fx:id="saveArticleButton" layoutX="459.0" layoutY="31.0" mnemonicParsing="false" onAction="#handleArticleUpdate" text="Speichern" />
+      <Button fx:id="excelExportButton" layoutX="99.0" layoutY="319.0" mnemonicParsing="false" onAction="#onExcelExportPerformed" text="Excel-Export" />
    </children>
 </AnchorPane>
