@@ -25,10 +25,5 @@
       <Button fx:id="queryButton" layoutX="387.0" layoutY="113.0" mnemonicParsing="false" onAction="#onQueryStarted" text="mitteilen" />
       <TextArea fx:id="resultField" editable="false" layoutX="152.0" layoutY="145.0" prefHeight="200.0" prefWidth="349.0" wrapText="true" />
       <TextField fx:id="amountField" layoutX="226.0" layoutY="113.0" onKeyTyped="#onTyped" promptText="Menge" />
-      <Label layoutX="150.0" layoutY="113.0" text="gebaut">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Label>
    </children>
 </AnchorPane>

@@ -1,8 +1,8 @@
 package de.robinkoesters.sskinventory.controller;
 
 import de.robinkoesters.sskinventory.entity.Component;
+import de.robinkoesters.sskinventory.export.ComponentExcelExport;
 import de.robinkoesters.sskinventory.repository.ComponentRepository;
-import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,6 +27,7 @@ public class ComponentListController implements Initializable {
     @FXML private Button searchButton;
     @FXML private TextField errorField;
     @FXML private TextField searchField;
+    @FXML private Button excelExportButton;
 
     public void setMainViewController(MainViewController mainViewController) {
         this.mainViewController = mainViewController;
@@ -49,7 +50,7 @@ public class ComponentListController implements Initializable {
             }
         } else {
             try {
-                componentList.getItems().setAll(repo.findAllComponents());
+                componentList.getItems().setAll(repo.findAllComponentsForListView());
             } catch (SQLException e) {
                 errorField.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
                 errorField.setText(e.getMessage());
@@ -97,5 +98,16 @@ public class ComponentListController implements Initializable {
     @FXML
     public void onSearch() {
         updateView();
+    }
+
+    @FXML
+    public void onExcelExportPerformed() {
+        if (!componentList.getItems().isEmpty()) {
+            try {
+                ComponentExcelExport.exportComponents();
+            } catch (Exception e) {
+                errorField.setText(e.getMessage());
+            }
+        }
     }
 }

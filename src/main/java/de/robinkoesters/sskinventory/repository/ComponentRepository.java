@@ -75,9 +75,21 @@ public class ComponentRepository extends Repository {
         }
     }
 
-    public ObservableList<Component> findAllComponents() throws SQLException {
+    public ObservableList<Component> findAllComponentsForListView() throws SQLException {
         ObservableList<Component> list = FXCollections.observableArrayList();
         PreparedStatement stmnt = conn.prepareStatement("SELECT * FROM COMPONENT ORDER BY identifier");
+        ResultSet rs = stmnt.executeQuery();
+        while (rs.next()) {
+            list.add(new Component(rs.getString("identifier"), rs.getInt("number"), rs.getInt("amount")));
+        }
+        rs.close();
+
+        return list;
+    }
+
+    public ObservableList<Component> findAllComponentsForExcelExport() throws SQLException {
+        ObservableList<Component> list = FXCollections.observableArrayList();
+        PreparedStatement stmnt = conn.prepareStatement("SELECT * FROM COMPONENT ORDER BY amount asc");
         ResultSet rs = stmnt.executeQuery();
         while (rs.next()) {
             list.add(new Component(rs.getString("identifier"), rs.getInt("number"), rs.getInt("amount")));

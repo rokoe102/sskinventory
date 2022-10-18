@@ -4,12 +4,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label layoutX="224.0" layoutY="181.0" text="Willkommen!">
+      <Label layoutX="246.0" layoutY="190.0" text="(C) Robin Kösters">
          <font>
-            <Font size="26.0" />
+            <Font size="14.0" />
          </font>
       </Label>
    </children>

@@ -21,6 +21,9 @@ public class AvailabilityRepository extends Repository {
         boolean isAvailable = false;
         int result = 99999;
         ObservableList<ComponentAssignment> assignments = componentRepository.findComponentAssignmentsFor(article);
+        if (assignments.isEmpty()) {
+            return "Diesem Artikel wurden bisher keine Komponenten zugewiesen.";
+        }
         for (ComponentAssignment assignment : assignments) {
             int amount = componentRepository.getAmountForComponent(assignment);
             System.out.println("found " + amount + " " + assignment.getComponent());

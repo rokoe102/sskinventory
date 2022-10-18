@@ -10,10 +10,11 @@ import javafx.stage.Stage;
 
 public class SSKInventory extends Application {
 
-    private Parent parent;
+    private static Stage mainStage;
 
     @Override
     public void start(Stage stage) throws Exception {
+        setMainStage(stage);
         stage.setTitle("SSKInventory");
         stage.getIcons().add(new Image("file:icon.png"));
         FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/fxml/MainView.fxml"));
@@ -27,4 +28,11 @@ public class SSKInventory extends Application {
         stage.show();
     }
 
+    public static Stage getMainStage() {
+        return mainStage;
+    }
+
+    public static void setMainStage(Stage mainStage) {
+        SSKInventory.mainStage = mainStage;
+    }
 }
