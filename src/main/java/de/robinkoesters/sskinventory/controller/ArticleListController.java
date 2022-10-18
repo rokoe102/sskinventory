@@ -1,5 +1,6 @@
 package de.robinkoesters.sskinventory.controller;
 
+import de.robinkoesters.sskinventory.dialogs.InventoryDialog;
 import de.robinkoesters.sskinventory.entity.Article;
 import de.robinkoesters.sskinventory.export.ComponentExcelExport;
 import de.robinkoesters.sskinventory.repository.ArticleRepository;
@@ -23,7 +24,6 @@ public class ArticleListController implements Initializable {
     @FXML private Button addButton;
     @FXML private Button deleteButton;
     @FXML private Button searchButton;
-    @FXML private TextField errorField;
     @FXML private TextField searchField;
 
     public void setMainViewController(MainViewController mainViewController) {
@@ -43,15 +43,15 @@ public class ArticleListController implements Initializable {
             try {
                 articleList.getItems().setAll(repo.findArticlesWithFilter(searchField.getText()));
             } catch (SQLException e) {
-                errorField.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
-                errorField.setText(e.getMessage());
+                InventoryDialog dialog = new InventoryDialog("Fehler", e.getMessage());
+                dialog.showInformation();
             }
         } else {
             try {
                 articleList.getItems().setAll(repo.findAllArticles());
             } catch (SQLException e) {
-                errorField.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
-                errorField.setText(e.getMessage());
+                InventoryDialog dialog = new InventoryDialog("Fehler", e.getMessage());
+                dialog.showInformation();
             }
         }
     }
@@ -66,7 +66,8 @@ public class ArticleListController implements Initializable {
                         try {
                             mainViewController.createArticleDetailTab(current);
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            InventoryDialog dialog = new InventoryDialog("Fehler", e.getMessage());
+                            dialog.showInformation();
                         }
                     }
                 }
@@ -87,7 +88,8 @@ public class ArticleListController implements Initializable {
                 repo.deleteArticle(selection);
                 updateView();
             } catch (SQLException e) {
-                errorField.setText(e.getMessage());
+                InventoryDialog dialog = new InventoryDialog("Fehler", "Löschen fehlgeschlagen", e.getMessage());
+                dialog.showInformation();
             }
         }
     }

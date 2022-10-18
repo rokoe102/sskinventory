@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.robinkoesters.sskinventory.controller.ComponentDetailController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.robinkoesters.sskinventory.controller.ComponentDetailController">
    <children>
       <TextField fx:id="identifierField" layoutX="291.0" layoutY="31.0" onKeyTyped="#handleTyping" />
       <Label layoutX="140.0" layoutY="30.0" text="Bezeichnung">
@@ -26,8 +26,7 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <ListView fx:id="assignmentList" layoutX="200.0" layoutY="208.0" prefHeight="139.0" prefWidth="200.0" />
-      <TextField fx:id="errorField" layoutX="38.0" layoutY="355.0" prefHeight="25.0" prefWidth="545.0" />
+      <ListView fx:id="assignmentList" layoutX="200.0" layoutY="208.0" prefHeight="180.0" prefWidth="200.0" />
       <Button fx:id="saveComponentButton" layoutX="469.0" layoutY="77.0" mnemonicParsing="false" onAction="#handleComponentUpdate" text="Speichern" />
       <Label layoutX="118.0" layoutY="116.0" text="verfügbare Menge">
          <font>

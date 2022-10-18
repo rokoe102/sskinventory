@@ -1,5 +1,6 @@
 package de.robinkoesters.sskinventory.controller;
 
+import de.robinkoesters.sskinventory.dialogs.InventoryDialog;
 import de.robinkoesters.sskinventory.entity.Component;
 import de.robinkoesters.sskinventory.export.ComponentExcelExport;
 import de.robinkoesters.sskinventory.repository.ComponentRepository;
@@ -25,7 +26,6 @@ public class ComponentListController implements Initializable {
     @FXML private Button addButton;
     @FXML private Button deleteButton;
     @FXML private Button searchButton;
-    @FXML private TextField errorField;
     @FXML private TextField searchField;
     @FXML private Button excelExportButton;
 
@@ -45,15 +45,15 @@ public class ComponentListController implements Initializable {
             try {
                 componentList.getItems().setAll(repo.findComponentsWithFilter(searchField.getText()));
             } catch (SQLException e) {
-                errorField.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
-                errorField.setText(e.getMessage());
+                InventoryDialog dialog = new InventoryDialog("Fehler", e.getMessage());
+                dialog.showError();
             }
         } else {
             try {
                 componentList.getItems().setAll(repo.findAllComponentsForListView());
             } catch (SQLException e) {
-                errorField.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
-                errorField.setText(e.getMessage());
+                InventoryDialog dialog = new InventoryDialog("Fehler", e.getMessage());
+                dialog.showError();
             }
         }
     }
@@ -68,8 +68,8 @@ public class ComponentListController implements Initializable {
                         try {
                             mainViewController.createComponentDetailTab(current);
                         } catch (IOException e) {
-                            errorField.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
-                            errorField.setText(e.getMessage());
+                            InventoryDialog dialog = new InventoryDialog("Fehler", e.getMessage());
+                            dialog.showError();
                         }
                     }
                 }
@@ -90,7 +90,8 @@ public class ComponentListController implements Initializable {
                 repo.deleteComponent(selection);
                 updateView();
             } catch (SQLException e) {
-                errorField.setText(e.getMessage());
+                InventoryDialog dialog = new InventoryDialog("Fehler", e.getMessage());
+                dialog.showError();
             }
         }
     }
@@ -106,7 +107,8 @@ public class ComponentListController implements Initializable {
             try {
                 ComponentExcelExport.exportAllComponents();
             } catch (Exception e) {
-                errorField.setText(e.getMessage());
+                InventoryDialog dialog = new InventoryDialog("Fehler", e.getMessage());
+                dialog.showError();
             }
         }
     }

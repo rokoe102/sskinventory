@@ -8,9 +8,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.robinkoesters.sskinventory.controller.SubmissionController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.robinkoesters.sskinventory.controller.SubmissionController">
    <children>
-      <TextField fx:id="errorField" layoutX="28.0" layoutY="354.0" prefHeight="25.0" prefWidth="545.0" />
       <Label layoutX="244.0" layoutY="25.0" text="Auslieferung">
          <font>
             <Font size="20.0" />
@@ -23,7 +22,7 @@
          </font>
       </Label>
       <Button fx:id="queryButton" layoutX="387.0" layoutY="113.0" mnemonicParsing="false" onAction="#onQueryStarted" text="mitteilen" />
-      <TextArea fx:id="resultField" editable="false" layoutX="152.0" layoutY="145.0" prefHeight="200.0" prefWidth="349.0" wrapText="true" />
+      <TextArea fx:id="resultField" editable="false" layoutX="152.0" layoutY="145.0" prefHeight="240.0" prefWidth="349.0" wrapText="true" />
       <TextField fx:id="amountField" layoutX="226.0" layoutY="113.0" onKeyTyped="#onTyped" promptText="Menge" />
    </children>
 </AnchorPane>

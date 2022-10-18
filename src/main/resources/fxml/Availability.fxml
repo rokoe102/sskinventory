@@ -4,13 +4,11 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.robinkoesters.sskinventory.controller.AvailabilityController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.robinkoesters.sskinventory.controller.AvailabilityController">
    <children>
-      <TextField fx:id="errorField" layoutX="28.0" layoutY="354.0" prefHeight="25.0" prefWidth="545.0" />
       <Label layoutX="250.0" layoutY="27.0" text="Verfügbarkeit">
          <font>
             <Font size="20.0" />
@@ -23,6 +21,6 @@
          </font>
       </Label>
       <Button fx:id="queryButton" layoutX="404.0" layoutY="79.0" mnemonicParsing="false" onAction="#onQueryStarted" text="Anfrage starten" />
-      <TextArea fx:id="resultField" editable="false" layoutX="152.0" layoutY="124.0" prefHeight="200.0" prefWidth="349.0" wrapText="true" />
+      <TextArea fx:id="resultField" editable="false" layoutX="152.0" layoutY="124.0" prefHeight="250.0" prefWidth="349.0" wrapText="true" />
    </children>
 </AnchorPane>

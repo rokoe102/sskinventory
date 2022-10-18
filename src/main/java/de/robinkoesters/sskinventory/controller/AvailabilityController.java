@@ -1,5 +1,6 @@
 package de.robinkoesters.sskinventory.controller;
 
+import de.robinkoesters.sskinventory.dialogs.InventoryDialog;
 import de.robinkoesters.sskinventory.entity.Article;
 import de.robinkoesters.sskinventory.repository.ArticleRepository;
 import de.robinkoesters.sskinventory.repository.AvailabilityRepository;
@@ -24,7 +25,6 @@ public class AvailabilityController implements Initializable {
     @FXML private ComboBox<Article> articleBox;
     @FXML private Button queryButton;
     @FXML private TextArea resultField;
-    @FXML private TextField errorField;
 
     public void setMainViewController(MainViewController mainViewController) {
         this.mainViewController = mainViewController;
@@ -43,8 +43,8 @@ public class AvailabilityController implements Initializable {
             articleBox.getItems().setAll(articleRepository.findAllArticles());
             queryButton.setDisable(true);
         } catch (SQLException e) {
-            errorField.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
-            errorField.setText(e.getMessage());
+            InventoryDialog dialog = new InventoryDialog("Fehler", e.getMessage());
+            dialog.showError();
         }
 
     }
@@ -60,7 +60,8 @@ public class AvailabilityController implements Initializable {
         try {
             resultField.setText(availabilityRepository.getAvailabilityInfo(articleBox.getSelectionModel().getSelectedItem()));
         } catch (SQLException e) {
-            e.printStackTrace();
+            InventoryDialog dialog = new InventoryDialog("Fehler", e.getMessage());
+            dialog.showError();
         }
     }
 }

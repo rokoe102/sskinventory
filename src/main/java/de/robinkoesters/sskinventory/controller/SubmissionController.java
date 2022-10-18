@@ -1,6 +1,7 @@
 package de.robinkoesters.sskinventory.controller;
 
 import de.robinkoesters.sskinventory.controller.MainViewController;
+import de.robinkoesters.sskinventory.dialogs.InventoryDialog;
 import de.robinkoesters.sskinventory.entity.Article;
 import de.robinkoesters.sskinventory.repository.ArticleRepository;
 import de.robinkoesters.sskinventory.repository.AvailabilityRepository;
@@ -25,7 +26,6 @@ public class SubmissionController implements Initializable {
     @FXML private TextField amountField;
     @FXML private Button queryButton;
     @FXML private TextArea resultField;
-    @FXML private TextField errorField;
 
     public void setMainViewController(MainViewController mainViewController) {
         this.mainViewController = mainViewController;
@@ -43,8 +43,8 @@ public class SubmissionController implements Initializable {
             articleBox.getItems().setAll(articleRepository.findAllArticles());
             queryButton.setDisable(true);
         } catch (SQLException e) {
-            errorField.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
-            errorField.setText(e.getMessage());
+            InventoryDialog dialog = new InventoryDialog("Fehler", e.getMessage());
+            dialog.showError();
         }
 
     }
@@ -83,11 +83,11 @@ public class SubmissionController implements Initializable {
     private boolean validateFields() {
         boolean success = true;
         try {
-            int amount = Integer.parseInt(amountField.getText());
+            Integer.parseInt(amountField.getText());
         } catch (NumberFormatException nfe) {
             success = false;
-            errorField.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
-            errorField.setText("Bitte natürliche Zahl für Menge eingeben!");
+            InventoryDialog dialog = new InventoryDialog("Fehler", "Bitte natürliche Zahl für Menge eingeben!");
+            dialog.showError();
         }
         return success;
     }

@@ -1,5 +1,6 @@
 package de.robinkoesters.sskinventory.controller;
 
+import de.robinkoesters.sskinventory.dialogs.InventoryDialog;
 import de.robinkoesters.sskinventory.entity.Component;
 import de.robinkoesters.sskinventory.repository.ComponentRepository;
 import de.robinkoesters.sskinventory.repository.DeliveryRepository;
@@ -23,7 +24,6 @@ public class DeliveryController implements Initializable {
     private ComboBox<Component> componentBox;
     @FXML private TextField amountField;
     @FXML private Button queryButton;
-    @FXML private TextField errorField;
 
     public void setMainViewController(MainViewController mainViewController) {
         this.mainViewController = mainViewController;
@@ -41,8 +41,8 @@ public class DeliveryController implements Initializable {
             componentBox.getItems().setAll(componentRepository.findAllComponentsForListView());
             queryButton.setDisable(true);
         } catch (SQLException e) {
-            errorField.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
-            errorField.setText(e.getMessage());
+            InventoryDialog dialog = new InventoryDialog("Fehler", e.getMessage());
+            dialog.showError();
         }
 
     }
@@ -63,15 +63,14 @@ public class DeliveryController implements Initializable {
 
     @FXML
     public void onQueryStarted() {
-        errorField.setText("");
         boolean success = validateFields();
         if (success) {
             try {
                 Component component = componentBox.getSelectionModel().getSelectedItem();
                 int amount = Integer.parseInt(amountField.getText());
 
-                errorField.setStyle("-fx-text-fill: greenyellow; -fx-font-size: 14px;");
-                errorField.setText(deliveryRepository.submitDelivery(component, amount));
+                InventoryDialog dialog = new InventoryDialog("Information", deliveryRepository.submitDelivery(component, amount));
+                dialog.showInformation();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -85,8 +84,8 @@ public class DeliveryController implements Initializable {
             int amount = Integer.parseInt(amountField.getText());
         } catch (NumberFormatException nfe) {
             success = false;
-            errorField.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
-            errorField.setText("Bitte natürliche Zahl für Menge eingeben!");
+            InventoryDialog dialog = new InventoryDialog("Fehler", "Bitte natürliche Zahl für Menge eingeben!");
+            dialog.showError();
         }
         return success;
     }

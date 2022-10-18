@@ -1,5 +1,6 @@
 package de.robinkoesters.sskinventory.controller;
 
+import de.robinkoesters.sskinventory.dialogs.InventoryDialog;
 import de.robinkoesters.sskinventory.entity.Article;
 import de.robinkoesters.sskinventory.entity.Component;
 import de.robinkoesters.sskinventory.entity.ComponentAssignment;
@@ -22,7 +23,6 @@ public class ComponentDetailController implements Initializable {
 
     private MainViewController mainViewController;
     private ComponentRepository componentRepository;
-    private ArticleRepository articleRepository;
 
     private Component component;
     @FXML
@@ -31,7 +31,6 @@ public class ComponentDetailController implements Initializable {
     @FXML private Button saveComponentButton;
     @FXML private ListView<ComponentAssignment> assignmentList;
     @FXML private TextField amountField;
-    @FXML private TextField errorField;
 
     public void setMainViewController(MainViewController mainViewController) {
         this.mainViewController = mainViewController;
@@ -40,7 +39,6 @@ public class ComponentDetailController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.componentRepository = new ComponentRepository();
-        this.articleRepository = new ArticleRepository();
 
         saveComponentButton.setVisible(false);
     }
@@ -57,8 +55,6 @@ public class ComponentDetailController implements Initializable {
         for (ComponentAssignment ca : assignmentList.getItems()) {
             components.remove(ca.getComponent());
         }
-
-        errorField.setText("");
     }
 
     @FXML
@@ -80,22 +76,18 @@ public class ComponentDetailController implements Initializable {
                     saveComponentButton.setVisible(false);
                     updateView(this.component);
                     mainViewController.renameTab("Neue Komponente", component.getIdentifier());
-                    errorField.setStyle("-fx-text-fill: greenyellow; -fx-font-size: 14px;");
-                    errorField.setText("Einfügen erfolgreich! (" + LocalDateTime.now() + ")");
                 } catch (SQLException sql) {
-                    errorField.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
-                    errorField.setText("Einfügen fehlgeschlagen: " + sql.getMessage());
+                    InventoryDialog dialog = new InventoryDialog("Fehler", "Einfügen fehlgeschlagen", sql.getMessage());
+                    dialog.showError();
                 }
             } else if (component.isExistingEntity()) {
                 try {
                     component = componentRepository.updateComponent(component, ident, number, amount);
                     saveComponentButton.setVisible(false);
                     updateView(this.component);
-                    errorField.setStyle("-fx-text-fill: greenyellow; -fx-font-size: 14px;");
-                    errorField.setText("Änderung erfolgreich! (" + LocalDateTime.now() + ")" );
                 } catch (SQLException sql) {
-                    errorField.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
-                    errorField.setText("Änderung fehlgeschlagen: " + sql.getMessage());
+                    InventoryDialog dialog = new InventoryDialog("Fehler", "Änderung fehlgeschlagen", sql.getMessage());
+                    dialog.showError();
                 }
             }
 
@@ -104,31 +96,35 @@ public class ComponentDetailController implements Initializable {
 
     public boolean validateFields() {
         boolean success = true;
-        errorField.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
         if (identifierField.getText().equals("") || identifierField.getText() == null) {
-            errorField.setText("Bitte Bezeichnung (Pflichtfeld) eingeben!");
+            InventoryDialog dialog = new InventoryDialog("Fehler", "Bitte Bezeichnung (Pflichtfeld) eingeben!");
+            dialog.showError();
             success = false;
         }
 
         try {
             int number = Integer.parseInt(numberField.getText());
             if (number < 0) {
-                errorField.setText("Bitte natürliche Zahl für Artikelnummer eingeben!");
+                InventoryDialog dialog = new InventoryDialog("Fehler", "Bitte natürliche Zahl für Artikelnummer eingeben!");
+                dialog.showError();
                 success = false;
             }
         } catch (NumberFormatException nfe) {
-            errorField.setText("Bitte natürliche Zahl für Artikelnummer eingeben!");
+            InventoryDialog dialog = new InventoryDialog("Fehler", "Bitte natürliche Zahl für Artikelnummer eingeben!");
+            dialog.showError();
             success = false;
         }
 
         try {
             int amount = Integer.parseInt(amountField.getText());
             if (amount < 0) {
-                errorField.setText("Bitte natürliche Zahl für Menge eingeben!");
+                InventoryDialog dialog = new InventoryDialog("Fehler", "Bitte natürliche Zahl für Menge eingeben!");
+                dialog.showError();
                 success = false;
             }
         } catch (NumberFormatException nfe) {
-            errorField.setText("Bitte natürliche Zahl für Menge eingeben!");
+            InventoryDialog dialog = new InventoryDialog("Fehler", "Bitte natürliche Zahl für Menge eingeben!");
+            dialog.showError();
             success = false;
         }
         return success;

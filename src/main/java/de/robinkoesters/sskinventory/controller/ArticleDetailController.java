@@ -1,5 +1,6 @@
 package de.robinkoesters.sskinventory.controller;
 
+import de.robinkoesters.sskinventory.dialogs.InventoryDialog;
 import de.robinkoesters.sskinventory.entity.Article;
 import de.robinkoesters.sskinventory.entity.Component;
 import de.robinkoesters.sskinventory.entity.ComponentAssignment;
@@ -10,10 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
@@ -36,7 +34,6 @@ public class ArticleDetailController implements Initializable {
     @FXML private Button addButton;
     @FXML private Button deleteButton;
     @FXML private Button saveButton;
-    @FXML private TextField errorField;
     @FXML private Button excelExportButton;
 
     public void setMainViewController(MainViewController mainViewController) {
@@ -65,13 +62,15 @@ public class ArticleDetailController implements Initializable {
                     try {
                         current = componentRepository.findComponentByIdentifier(currentComponent);
                     } catch (SQLException sql) {
-                        errorField.setText("Laden fehlgeschlagen: " + sql.getMessage());
+                        InventoryDialog dialog = new InventoryDialog("Fehler", "Fehler beim Laden", sql.getMessage());
+                        dialog.showError();
                     }
                     if (current != null && !mainViewController.isTabAlreadyOpen(current.getIdentifier())) {
                         try {
                             mainViewController.createComponentDetailTab(current);
                         } catch (IOException e) {
-                            errorField.setText("Laden fehlgeschlagen: " + e.getMessage());
+                            InventoryDialog dialog = new InventoryDialog("Fehler", "Fehler beim Öffnen", e.getMessage());
+                            dialog.showError();
                         }
                     }
                 }
@@ -100,8 +99,6 @@ public class ArticleDetailController implements Initializable {
             }
             componentBox.getItems().setAll(components);
         }
-
-        errorField.setText("");
     }
 
     @FXML
@@ -126,9 +123,11 @@ public class ArticleDetailController implements Initializable {
                 updateView(this.article);
                 hideSaveDialog();
             } catch (IllegalArgumentException nfe) {
-                errorField.setText("Bitte eine natürliche Zahl größer 0 als Menge eingeben!");
+                InventoryDialog dialog = new InventoryDialog("Fehler", "Bitte eine natürliche Zahl größer 0 als Menge eingeben!");
+                dialog.showError();
             } catch (SQLException sql) {
-                errorField.setText("Speichern fehlgeschlagen: " + sql.getMessage());
+                InventoryDialog dialog = new InventoryDialog("Fehler", "Speichern fehlgeschlagen", sql.getMessage());
+                dialog.showError();
             }
         }
     }
@@ -141,7 +140,8 @@ public class ArticleDetailController implements Initializable {
                 componentRepository.deleteAssignment(selection);
                 updateView(this.article);
             } catch (Exception e) {
-                errorField.setText(e.getMessage());
+                InventoryDialog dialog = new InventoryDialog("Fehler", "", e.getMessage());
+                dialog.showError();
             }
         }
     }
@@ -163,20 +163,17 @@ public class ArticleDetailController implements Initializable {
                     updateView(this.article);
                     mainViewController.renameTab("Neuer Artikel", article.getIdentifier());
                 } catch (SQLException sql) {
-                    errorField.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
-                    errorField.setText("Einfügen fehlgeschlagen: " + sql.getMessage());
+                    InventoryDialog dialog = new InventoryDialog("Fehler", "Einfügen fehlgeschlagen", sql.getMessage());
+                    dialog.showError();
                 }
             } else if (!article.isNewEntity()) {
                 try {
                     article = articleRepository.updateArticle(article, ident);
                     saveArticleButton.setVisible(false);
                     updateView(this.article);
-
-                    errorField.setStyle("-fx-text-fill: greenyellow; -fx-font-size: 14px;");
-                    errorField.setText("Änderung erfolgreich!");
                 } catch (SQLException sql) {
-                    errorField.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
-                    errorField.setText("Änderung fehlgeschlagen: " + sql.getMessage());
+                    InventoryDialog dialog = new InventoryDialog("Fehler", "Änderung fehlgeschlagen", sql.getMessage());
+                    dialog.showError();
                 }
 
             }
@@ -187,9 +184,9 @@ public class ArticleDetailController implements Initializable {
 
     public boolean validateFields() {
         boolean success = true;
-        errorField.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
         if (identifierField.getText().equals("") || identifierField.getText() == null) {
-            errorField.setText("Bitte Bezeichnung (Pflichtfeld) eingeben!");
+            InventoryDialog dialog = new InventoryDialog("Fehler", "Pflichtfeld nicht gefüllt", "Bitte Bezeichnung (Pflichtfeld) eingeben!");
+            dialog.showError();
             success = false;
         }
         return success;

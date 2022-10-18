@@ -1,5 +1,6 @@
 package de.robinkoesters.sskinventory.controller;
 
+import de.robinkoesters.sskinventory.dialogs.InventoryDialog;
 import de.robinkoesters.sskinventory.entity.Article;
 import de.robinkoesters.sskinventory.repository.ArticleRepository;
 import de.robinkoesters.sskinventory.repository.AvailabilityRepository;
@@ -21,7 +22,6 @@ public class SettingsController implements Initializable {
     @FXML private Label question;
     @FXML private Button dbResetButton;
     @FXML private Button abortButton;
-    @FXML private TextField errorField;
 
     public void setMainViewController(MainViewController mainViewController) {
         this.mainViewController = mainViewController;
@@ -54,11 +54,12 @@ public class SettingsController implements Initializable {
             dbResetButton.setVisible(false);
             abortButton.setVisible(false);
         } catch (SQLException e) {
-            errorField.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
-            errorField.setText("Fehler beim Zurücksetzen: " + e.getMessage());
+            InventoryDialog dialog = new InventoryDialog("Fehler", "Fehler beim Zurücksetzen", e.getMessage());
+            dialog.showError();
         }
-        errorField.setStyle("-fx-text-fill: greenyellow; -fx-font-size: 14px;");
-        errorField.setText("Datenbank erfolgreich zurückgesetzt!");
+
+        InventoryDialog dialog = new InventoryDialog("Information", "Datenbank erfolgreich zurückgesetzt!");
+        dialog.showInformation();
     }
 
     @FXML
