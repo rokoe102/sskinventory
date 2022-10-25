@@ -16,7 +16,6 @@ import java.util.ResourceBundle;
 
 public class DeliveryController implements Initializable {
 
-    private MainViewController mainViewController;
     private ComponentRepository componentRepository;
     private DeliveryRepository deliveryRepository;
 
@@ -24,10 +23,6 @@ public class DeliveryController implements Initializable {
     private ComboBox<Component> componentBox;
     @FXML private TextField amountField;
     @FXML private Button queryButton;
-
-    public void setMainViewController(MainViewController mainViewController) {
-        this.mainViewController = mainViewController;
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

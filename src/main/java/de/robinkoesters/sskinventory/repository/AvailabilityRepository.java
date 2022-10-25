@@ -4,10 +4,14 @@ import de.robinkoesters.sskinventory.entity.Article;
 import de.robinkoesters.sskinventory.entity.Component;
 import de.robinkoesters.sskinventory.entity.ComponentAssignment;
 import javafx.collections.ObservableList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 
 public class AvailabilityRepository extends Repository {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AvailabilityRepository.class);
 
     ComponentRepository componentRepository;
 
@@ -26,8 +30,6 @@ public class AvailabilityRepository extends Repository {
         }
         for (ComponentAssignment assignment : assignments) {
             int amount = componentRepository.getAmountForComponent(assignment);
-            System.out.println("found " + amount + " " + assignment.getComponent());
-            System.out.println("... " + assignment.getNeeded() + " are needed");
             if (amount >= assignment.getNeeded()) {
                 int current = Math.floorDiv(amount,assignment.getNeeded());
                 if (current < result) {
@@ -101,11 +103,17 @@ public class AvailabilityRepository extends Repository {
                     .append(article)
                     .append(" gebaut.\n")
                     .append("Es bleiben folgende Mengen übrig:\n");
+
+        LOGGER.info("built " + built + " units of article " + article.getIdentifier());
+
         ObservableList<ComponentAssignment> assignments = componentRepository.findComponentAssignmentsFor(article);
         for (ComponentAssignment assignment : assignments) {
             int currentAmount = componentRepository.getAmountForComponent(assignment);
             int newAmount = currentAmount - (assignment.getNeeded() * built);
             componentRepository.updateAmount(assignment.getComponent(), newAmount);
+
+            LOGGER.info("reduced amount of " + assignment.getComponent() + " from " + currentAmount + " to " + newAmount);
+
             resultString.append(assignment.getComponent())
                         .append(": ")
                         .append(newAmount)

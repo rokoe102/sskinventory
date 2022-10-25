@@ -1,6 +1,5 @@
 package de.robinkoesters.sskinventory.controller;
 
-import de.robinkoesters.sskinventory.controller.MainViewController;
 import de.robinkoesters.sskinventory.dialogs.InventoryDialog;
 import de.robinkoesters.sskinventory.entity.Article;
 import de.robinkoesters.sskinventory.repository.ArticleRepository;
@@ -9,8 +8,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -18,18 +18,13 @@ import java.util.ResourceBundle;
 
 public class SubmissionController implements Initializable {
 
-    private MainViewController mainViewController;
-    private ArticleRepository articleRepository;
+    private static final Logger LOGGER = LoggerFactory.getLogger(SubmissionController.class);
+
     private AvailabilityRepository availabilityRepository;
 
     @FXML private ComboBox<Article> articleBox;
     @FXML private TextField amountField;
     @FXML private Button queryButton;
-    @FXML private TextArea resultField;
-
-    public void setMainViewController(MainViewController mainViewController) {
-        this.mainViewController = mainViewController;
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -38,11 +33,12 @@ public class SubmissionController implements Initializable {
 
     public void updateView() {
         try {
-            articleRepository = new ArticleRepository();
+            ArticleRepository articleRepository = new ArticleRepository();
             availabilityRepository = new AvailabilityRepository();
             articleBox.getItems().setAll(articleRepository.findAllArticles());
             queryButton.setDisable(true);
         } catch (SQLException e) {
+            LOGGER.error(e.getMessage(), e);
             InventoryDialog dialog = new InventoryDialog("Fehler", e.getMessage());
             dialog.showError();
         }
@@ -65,19 +61,22 @@ public class SubmissionController implements Initializable {
 
     @FXML
     public void onQueryStarted() {
-        resultField.setText("");
         boolean success = validateFields();
         if (success) {
             try {
                 Article article = articleBox.getSelectionModel().getSelectedItem();
                 int amount = Integer.parseInt(amountField.getText());
 
-                resultField.setText(availabilityRepository.getSubmissionInfo(article, amount));
+                String info = availabilityRepository.getSubmissionInfo(article, amount);
+
+                InventoryDialog dialog = new InventoryDialog("Ergebnis", info);
+                dialog.showResult();
             } catch (SQLException e) {
-                e.printStackTrace();
+                LOGGER.error(e.getMessage(), e);
+                InventoryDialog dialog = new InventoryDialog("Fehler", e.getMessage());
+                dialog.showError();
             }
         }
-
     }
 
     private boolean validateFields() {

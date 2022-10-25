@@ -1,5 +1,7 @@
 package de.robinkoesters.sskinventory.repository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sqlite.SQLiteConfig;
 
 import java.sql.Connection;
@@ -7,6 +9,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Repository {
+
+    private static final Logger PARENTLOGGER = LoggerFactory.getLogger(Repository.class);
 
     Connection conn;
 
@@ -18,10 +22,8 @@ public class Repository {
 
         try {
             conn = DriverManager.getConnection("jdbc:sqlite:inventory.db", config.toProperties());
-            System.out.println("Verbindung des Repository zur Datenbank erfolgreich.");
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Verbindung des Repository zur Datenbank fehlgeschlagen!");
+            PARENTLOGGER.error(e.getMessage(), e);
         }
     }
 

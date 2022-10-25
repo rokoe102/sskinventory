@@ -18,16 +18,13 @@ import java.util.ResourceBundle;
 
 public class AvailabilityController implements Initializable {
 
-    private MainViewController mainViewController;
     private ArticleRepository articleRepository;
     private AvailabilityRepository availabilityRepository;
 
     @FXML private ComboBox<Article> articleBox;
     @FXML private Button queryButton;
-    @FXML private TextArea resultField;
 
     public void setMainViewController(MainViewController mainViewController) {
-        this.mainViewController = mainViewController;
     }
 
     @Override
@@ -36,7 +33,6 @@ public class AvailabilityController implements Initializable {
     }
 
     public void updateView() {
-        resultField.setText("");
         try {
             articleRepository = new ArticleRepository();
             availabilityRepository = new AvailabilityRepository();
@@ -56,9 +52,10 @@ public class AvailabilityController implements Initializable {
 
     @FXML
     public void onQueryStarted() {
-        resultField.setText("");
         try {
-            resultField.setText(availabilityRepository.getAvailabilityInfo(articleBox.getSelectionModel().getSelectedItem()));
+            String info = availabilityRepository.getAvailabilityInfo(articleBox.getSelectionModel().getSelectedItem());
+            InventoryDialog dialog = new InventoryDialog("Ergebnis", info);
+            dialog.showResult();
         } catch (SQLException e) {
             InventoryDialog dialog = new InventoryDialog("Fehler", e.getMessage());
             dialog.showError();

@@ -164,14 +164,10 @@ public class MainViewController {
         Parent root = loader.load();
 
         AvailabilityController availabilityController = loader.getController();
-        availabilityController.setMainViewController(this);
 
-        tab.setOnSelectionChanged(new EventHandler<Event>() {
-            @Override
-            public void handle(Event t) {
-                if (tab.isSelected()) {
-                    availabilityController.updateView();
-                }
+        tab.setOnSelectionChanged(t -> {
+            if (tab.isSelected()) {
+                availabilityController.updateView();
             }
         });
 
@@ -186,14 +182,10 @@ public class MainViewController {
         Parent root = loader.load();
 
         SubmissionController submissionController = loader.getController();
-        submissionController.setMainViewController(this);
 
-        tab.setOnSelectionChanged(new EventHandler<Event>() {
-            @Override
-            public void handle(Event t) {
-                if (tab.isSelected()) {
-                    submissionController.updateView();
-                }
+        tab.setOnSelectionChanged(t -> {
+            if (tab.isSelected()) {
+                submissionController.updateView();
             }
         });
 
@@ -208,14 +200,10 @@ public class MainViewController {
         Parent root = loader.load();
 
         DeliveryController deliveryController = loader.getController();
-        deliveryController.setMainViewController(this);
 
-        tab.setOnSelectionChanged(new EventHandler<Event>() {
-            @Override
-            public void handle(Event t) {
-                if (tab.isSelected()) {
-                    deliveryController.updateView();
-                }
+        tab.setOnSelectionChanged(t -> {
+            if (tab.isSelected()) {
+                deliveryController.updateView();
             }
         });
 
@@ -237,12 +225,9 @@ public class MainViewController {
         SettingsController settingsController = loader.getController();
         settingsController.setMainViewController(this);
 
-        tab.setOnSelectionChanged(new EventHandler<Event>() {
-            @Override
-            public void handle(Event t) {
-                if (tab.isSelected()) {
-                    settingsController.updateView();
-                }
+        tab.setOnSelectionChanged(t -> {
+            if (tab.isSelected()) {
+                settingsController.updateView();
             }
         });
 
