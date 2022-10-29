@@ -1,5 +1,6 @@
 package de.robinkoesters.sskinventory.controller;
 
+import de.robinkoesters.sskinventory.SSKInventory;
 import de.robinkoesters.sskinventory.dialogs.InventoryDialog;
 import de.robinkoesters.sskinventory.entity.Article;
 import de.robinkoesters.sskinventory.entity.Component;
@@ -12,11 +13,14 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class ArticleDetailController implements Initializable {
@@ -28,12 +32,11 @@ public class ArticleDetailController implements Initializable {
     private Article article;
     @FXML private TextField identifierField;
     @FXML private Button saveArticleButton;
-    @FXML private ListView<ComponentAssignment> assignmentList;
-    @FXML private ComboBox<String> componentBox;
-    @FXML private TextField amountField;
+    @FXML private TableView<ComponentAssignment> assignmentTable;
+    @FXML private TableColumn<ComponentAssignment, String> idCol;
+    @FXML private TableColumn<ComponentAssignment, Integer> amountCol;
     @FXML private Button addButton;
     @FXML private Button deleteButton;
-    @FXML private Button saveButton;
     @FXML private Button excelExportButton;
 
     public void setMainViewController(MainViewController mainViewController) {
@@ -47,15 +50,15 @@ public class ArticleDetailController implements Initializable {
         this.articleRepository = new ArticleRepository();
 
         saveArticleButton.setVisible(false);
-        componentBox.setVisible(false);
-        amountField.setVisible(false);
-        saveButton.setVisible(false);
+
+        idCol.setCellValueFactory(new PropertyValueFactory<>("component"));
+        amountCol.setCellValueFactory(new PropertyValueFactory<>("needed"));
     }
 
     private void defineDoubleClickEvent() {
-        assignmentList.setOnMouseClicked(click -> {
+        assignmentTable.setOnMouseClicked(click -> {
             if (click.getClickCount() == 2) {
-                String currentComponent = assignmentList.getSelectionModel().getSelectedItem().getComponent();
+                String currentComponent = assignmentTable.getSelectionModel().getSelectedItem().getComponent();
                 Component current = null;
                 try {
                     current = componentRepository.findComponentByIdentifier(currentComponent);
@@ -82,62 +85,63 @@ public class ArticleDetailController implements Initializable {
         this.identifierField.setText(article.getIdentifier());
 
         if (article.isNewEntity()) {
-            assignmentList.setDisable(true);
+            assignmentTable.setDisable(true);
             addButton.setDisable(true);
             deleteButton.setDisable(true);
         } else {
-            assignmentList.setDisable(false);
-            assignmentList.getItems().setAll(componentRepository.findComponentAssignmentsFor(article));
+            assignmentTable.setDisable(false);
+            assignmentTable.getItems().setAll(componentRepository.findComponentAssignmentsFor(article));
             addButton.setDisable(false);
             deleteButton.setDisable(false);
             ObservableList<String> components = componentRepository.findAllComponentRefs();
-            for (ComponentAssignment ca : assignmentList.getItems()) {
+            for (ComponentAssignment ca : assignmentTable.getItems()) {
                 components.remove(ca.getComponent());
             }
-            componentBox.getItems().setAll(components);
         }
     }
 
     @FXML
-    public void add() {
-        if (componentBox.isVisible()) {
-            hideSaveDialog();
-        } else {
-            showSaveDialog();
-        }
+    public void onAddition() {
+        List<String> components = componentRepository.findAllComponentRefs();
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(components.get(0), components);
+        dialog.setTitle("Zuordnung");
+        dialog.setHeaderText("Wählen Sie eine Komponente aus:");
+        dialog.initOwner(SSKInventory.getMainStage());
+        Optional<String> component = dialog.showAndWait();
 
+        if (component.isPresent() && !component.get().equals("")) {
+            TextInputDialog amountDialog = new TextInputDialog("1");
+            amountDialog.setTitle("Zuordnung");
+            amountDialog.setHeaderText("Bitte geben Sie die Stückzahl ein:");
+            amountDialog.initOwner(SSKInventory.getMainStage());
+
+            Optional<String> amountString = amountDialog.showAndWait();
+            if (amountString.isPresent() && !amountString.get().equals("")) {
+                int amount = Integer.parseInt(amountString.get());
+
+                try {
+                    componentRepository.createNewAssignment(this.article, component.get(), amount);
+                    updateView(this.article);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
     }
 
     @FXML
     public void handleAssignmentSave() {
-        if (componentBox.getSelectionModel().getSelectedItem() != null) {
-            try {
-                int amount = Integer.parseInt(amountField.getText());
-                if (amount < 1) {
-                    throw new IllegalArgumentException();
-                }
-                componentRepository.createNewAssignment(article, componentBox.getSelectionModel().getSelectedItem(), amount);
-                updateView(this.article);
-                hideSaveDialog();
-            } catch (IllegalArgumentException nfe) {
-                InventoryDialog dialog = new InventoryDialog(InventoryDialog.ERROR, "Bitte eine natürliche Zahl größer 0 als Menge eingeben!");
-                dialog.showError();
-            } catch (SQLException sql) {
-                InventoryDialog dialog = new InventoryDialog(InventoryDialog.ERROR, "Speichern fehlgeschlagen", sql.getMessage());
-                dialog.showError();
-            }
-        }
     }
 
     @FXML
-    public void handleDeletion() {
-        ComponentAssignment selection = assignmentList.getSelectionModel().getSelectedItem();
+    public void onDeletion() {
+        ComponentAssignment selection = assignmentTable.getSelectionModel().getSelectedItem();
         if (selection != null) {
             try {
                 componentRepository.deleteAssignment(selection);
                 updateView(this.article);
             } catch (Exception e) {
-                InventoryDialog dialog = new InventoryDialog("Fehler", "", e.getMessage());
+                InventoryDialog dialog = new InventoryDialog(InventoryDialog.ERROR, "", e.getMessage());
                 dialog.showError();
             }
         }
@@ -160,7 +164,7 @@ public class ArticleDetailController implements Initializable {
                     updateView(this.article);
                     mainViewController.renameTab("Neuer Artikel", article.getIdentifier());
                 } catch (SQLException sql) {
-                    InventoryDialog dialog = new InventoryDialog("Fehler", "Einfügen fehlgeschlagen", sql.getMessage());
+                    InventoryDialog dialog = new InventoryDialog(InventoryDialog.ERROR, "Einfügen fehlgeschlagen", sql.getMessage());
                     dialog.showError();
                 }
             } else if (!article.isNewEntity()) {
@@ -169,7 +173,7 @@ public class ArticleDetailController implements Initializable {
                     saveArticleButton.setVisible(false);
                     updateView(this.article);
                 } catch (SQLException sql) {
-                    InventoryDialog dialog = new InventoryDialog("Fehler", "Änderung fehlgeschlagen", sql.getMessage());
+                    InventoryDialog dialog = new InventoryDialog(InventoryDialog.ERROR, "Änderung fehlgeschlagen", sql.getMessage());
                     dialog.showError();
                 }
 
@@ -190,20 +194,11 @@ public class ArticleDetailController implements Initializable {
     }
 
     public void showSaveDialog() {
-        componentBox.setVisible(true);
-        amountField.setVisible(true);
-        saveButton.setVisible(true);
-    }
-
-    public void hideSaveDialog() {
-        componentBox.setVisible(false);
-        amountField.setVisible(false);
-        saveButton.setVisible(false);
     }
 
     @FXML
     public void onExcelExportPerformed() {
-        if (!assignmentList.getItems().isEmpty()) {
+        if (!assignmentTable.getItems().isEmpty()) {
             try {
                 ComponentExcelExport.exportComponentsForArticle(article);
             } catch (Exception e) {

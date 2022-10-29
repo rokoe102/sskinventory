@@ -15,14 +15,14 @@ public class DeliveryRepository extends Repository {
         super();
     }
 
-    public String submitDelivery(Component component, int amount) throws SQLException {
+    public String submitDelivery(String component, int amount) throws SQLException {
         PreparedStatement stmnt = conn.prepareStatement("UPDATE COMPONENT SET amount = amount + ? WHERE identifier = ?");
         stmnt.setInt(1, amount);
-        stmnt.setString(2, component.getIdentifier());
+        stmnt.setString(2, component);
 
         stmnt.executeUpdate();
 
-        LOGGER.info("increased amount of " + component.getIdentifier() + " by " + amount);
+        LOGGER.info("increased amount of " + component + " by " + amount);
 
         return "Anlieferung erfolgreich übermittelt!";
     }

@@ -1,15 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.robinkoesters.sskinventory.controller.WelcomingController">
    <children>
-      <Label layoutX="246.0" layoutY="190.0" text="(C) Robin Kösters">
+      <Label layoutX="479.0" layoutY="416.0" text="(C) Robin Kösters">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
+      <Label fx:id="dateLabel" alignment="CENTER" layoutX="228.0" layoutY="24.0" text="XX., dd.MM.yyyy">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Accordion layoutX="100.0" layoutY="63.0" prefWidth="400.0">
+        <panes>
+          <TitledPane animated="false" text="v 1.6.0">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TextArea layoutX="-2.0" prefHeight="183.0" prefWidth="406.0" text="- Listenansichten durch Tabellen ersetzt: Sortierung nach Spaltenwerten&#10;   möglich&#10;- einige Schaltflächen um Icons ergänzt&#10;- Anlieferung von meheren Komponenten gleichzeitig möglich " />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </TitledPane>
+            <TitledPane animated="false" layoutX="10.0" layoutY="10.0" text="v 1.5.0">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TextArea layoutX="-3.0" prefHeight="183.0" prefWidth="406.0" text="- Logging eingebaut: Fehler und programminterne Infos abgelegt unter&#10;  /logs/&#10;- Fehlerfeld am unteren Rand durch Fehlerdialoge ersetzt&#10;- Excel-Export von Komponenten pro Artikel" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </TitledPane>
+            <TitledPane animated="false" layoutX="10.0" layoutY="36.0" text="v 1.4.0">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TextArea layoutX="-3.0" prefHeight="183.0" prefWidth="406.0" text="- Excel-Export aller Komponenten  " />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </TitledPane>
+        </panes>
+      </Accordion>
    </children>
 </AnchorPane>

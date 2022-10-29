@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.robinkoesters.sskinventory.controller.ComponentListController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.robinkoesters.sskinventory.controller.ComponentListController">
     <Button fx:id="addButton" layoutX="75.0" layoutY="14.0" maxHeight="20.0" maxWidth="70.0" mnemonicParsing="false" onAction="#onAddition" prefHeight="20.0" prefWidth="70.0" text="Neu">
       <graphic>
             <ImageView fitHeight="${addButton.prefHeight}" fitWidth="${addButton.prefWidth}" preserveRatio="true">
@@ -21,13 +21,13 @@
             </ImageView>
       </graphic>
     </Button>
-    <Button fx:id="deleteButton" layoutX="159.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#onDeletion" prefHeight="20.0" prefWidth="90.0" text="Löschen">
+    <Button fx:id="deleteButton" layoutX="145.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#onDeletion" prefHeight="20.0" prefWidth="90.0" text="Löschen">
       <graphic>
           <ImageView fitHeight="${deleteButton.prefHeight}" fitWidth="${deleteButton.prefWidth}" preserveRatio="true">
               <Image url="@../remove.png" />
           </ImageView>
       </graphic></Button>
-    <Button fx:id="excelExportButton" layoutX="259.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#onExcelExportPerformed" prefHeight="20.0" prefWidth="110.0" text="Excel-Export">
+    <Button fx:id="excelExportButton" layoutX="235.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#onExcelExportPerformed" prefHeight="20.0" prefWidth="110.0" text="Excel-Export">
       <graphic>
          <ImageView fitHeight="${excelExportButton.prefHeight}" fitWidth="${excelExportButton.prefWidth}" preserveRatio="true">
             <image>

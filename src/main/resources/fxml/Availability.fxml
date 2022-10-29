@@ -6,19 +6,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.robinkoesters.sskinventory.controller.AvailabilityController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="58.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.robinkoesters.sskinventory.controller.AvailabilityController">
    <children>
-      <Label layoutX="250.0" layoutY="27.0" text="Verfügbarkeit">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
-      <ComboBox fx:id="articleBox" layoutX="225.0" layoutY="79.0" onAction="#onSelection" prefWidth="150.0" />
-      <Label layoutX="152.0" layoutY="79.0" text="Artikel">
+      <ComboBox fx:id="articleBox" layoutX="225.0" layoutY="14.0" onAction="#onSelection" prefWidth="150.0" />
+      <Label layoutX="153.0" layoutY="14.0" text="Artikel">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <Button fx:id="queryButton" layoutX="404.0" layoutY="79.0" mnemonicParsing="false" onAction="#onQueryStarted" text="Anfrage starten" />
+      <Button fx:id="queryButton" layoutX="392.0" layoutY="14.0" mnemonicParsing="false" onAction="#onQueryStarted" text="Anfrage starten" />
    </children>
 </AnchorPane>
