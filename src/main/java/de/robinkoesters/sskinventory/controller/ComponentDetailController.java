@@ -9,10 +9,8 @@ import de.robinkoesters.sskinventory.repository.ComponentRepository;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -29,7 +27,9 @@ public class ComponentDetailController implements Initializable {
     private TextField identifierField;
     @FXML private TextField numberField;
     @FXML private Button saveComponentButton;
-    @FXML private ListView<ComponentAssignment> assignmentList;
+    @FXML private TableView<ComponentAssignment> assignmentTable;
+    @FXML private TableColumn<ComponentAssignment, String> idCol;
+    @FXML private TableColumn<ComponentAssignment, Integer> amountCol;
     @FXML private TextField amountField;
 
     public void setMainViewController(MainViewController mainViewController) {
@@ -39,27 +39,46 @@ public class ComponentDetailController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.componentRepository = new ComponentRepository();
-
         saveComponentButton.setVisible(false);
+        idCol.setCellValueFactory(new PropertyValueFactory<>("article"));
+        amountCol.setCellValueFactory(new PropertyValueFactory<>("needed"));
     }
 
     public void updateView(Component component) {
         this.component = component;
-        this.identifierField.setText(component.getIdentifier());
-        this.numberField.setText(String.valueOf(component.getNumber()));
-        System.out.println("updateView: " + component.getAmount());
-        this.amountField.setText(String.valueOf(component.getAmount()));
 
-        assignmentList.getItems().setAll(componentRepository.findComponentAssignmentsFor(component));
+        this.identifierField.setText(component.getIdentifier());
+        this.identifierField.setStyle("-fx-text-fill: white;");
+
+        this.numberField.setText(String.valueOf(component.getNumber()));
+        this.numberField.setStyle("-fx-text-fill: white;");
+
+        this.amountField.setText(String.valueOf(component.getAmount()));
+        this.amountField.setStyle("-fx-text-fill: white;");
+
+        assignmentTable.getItems().setAll(componentRepository.findComponentAssignmentsFor(component));
         ObservableList<String> components = componentRepository.findAllComponentRefs();
-        for (ComponentAssignment ca : assignmentList.getItems()) {
+        for (ComponentAssignment ca : assignmentTable.getItems()) {
             components.remove(ca.getComponent());
         }
     }
 
     @FXML
-    public void handleTyping() {
+    public void handleIdentifierTyping() {
         saveComponentButton.setVisible(true);
+        identifierField.setStyle("-fx-text-fill: aqua;");
+    }
+
+    @FXML
+    public void handleArticleNoTyping() {
+        saveComponentButton.setVisible(true);
+        numberField.setStyle("-fx-text-fill: aqua;");
+    }
+
+    @FXML
+    public void handleAmountTyping() {
+        saveComponentButton.setVisible(true);
+        amountField.setStyle("-fx-text-fill: aqua;");
     }
 
     @FXML
@@ -77,16 +96,18 @@ public class ComponentDetailController implements Initializable {
                     updateView(this.component);
                     mainViewController.renameTab("Neue Komponente", component.getIdentifier());
                 } catch (SQLException sql) {
-                    InventoryDialog dialog = new InventoryDialog("Fehler", "Einfügen fehlgeschlagen", sql.getMessage());
+                    InventoryDialog dialog = new InventoryDialog(InventoryDialog.ERROR, "Einfügen fehlgeschlagen", sql.getMessage());
                     dialog.showError();
                 }
             } else if (component.isExistingEntity()) {
                 try {
+                    String oldCaption = this.component.getIdentifier();
                     component = componentRepository.updateComponent(component, ident, number, amount);
                     saveComponentButton.setVisible(false);
+                    mainViewController.renameTab(oldCaption, component.getIdentifier());
                     updateView(this.component);
                 } catch (SQLException sql) {
-                    InventoryDialog dialog = new InventoryDialog("Fehler", "Änderung fehlgeschlagen", sql.getMessage());
+                    InventoryDialog dialog = new InventoryDialog(InventoryDialog.ERROR, "Änderung fehlgeschlagen", sql.getMessage());
                     dialog.showError();
                 }
             }
@@ -97,7 +118,7 @@ public class ComponentDetailController implements Initializable {
     public boolean validateFields() {
         boolean success = true;
         if (identifierField.getText().equals("") || identifierField.getText() == null) {
-            InventoryDialog dialog = new InventoryDialog("Fehler", "Bitte Bezeichnung (Pflichtfeld) eingeben!");
+            InventoryDialog dialog = new InventoryDialog(InventoryDialog.ERROR, "Bitte Bezeichnung (Pflichtfeld) eingeben!");
             dialog.showError();
             success = false;
         }
@@ -105,12 +126,12 @@ public class ComponentDetailController implements Initializable {
         try {
             int number = Integer.parseInt(numberField.getText());
             if (number < 0) {
-                InventoryDialog dialog = new InventoryDialog("Fehler", "Bitte natürliche Zahl für Artikelnummer eingeben!");
+                InventoryDialog dialog = new InventoryDialog(InventoryDialog.ERROR, "Bitte natürliche Zahl für Artikelnummer eingeben!");
                 dialog.showError();
                 success = false;
             }
         } catch (NumberFormatException nfe) {
-            InventoryDialog dialog = new InventoryDialog("Fehler", "Bitte natürliche Zahl für Artikelnummer eingeben!");
+            InventoryDialog dialog = new InventoryDialog(InventoryDialog.ERROR, "Bitte natürliche Zahl für Artikelnummer eingeben!");
             dialog.showError();
             success = false;
         }
@@ -118,12 +139,12 @@ public class ComponentDetailController implements Initializable {
         try {
             int amount = Integer.parseInt(amountField.getText());
             if (amount < 0) {
-                InventoryDialog dialog = new InventoryDialog("Fehler", "Bitte natürliche Zahl für Menge eingeben!");
+                InventoryDialog dialog = new InventoryDialog(InventoryDialog.ERROR, "Bitte natürliche Zahl für Menge eingeben!");
                 dialog.showError();
                 success = false;
             }
         } catch (NumberFormatException nfe) {
-            InventoryDialog dialog = new InventoryDialog("Fehler", "Bitte natürliche Zahl für Menge eingeben!");
+            InventoryDialog dialog = new InventoryDialog(InventoryDialog.ERROR, "Bitte natürliche Zahl für Menge eingeben!");
             dialog.showError();
             success = false;
         }

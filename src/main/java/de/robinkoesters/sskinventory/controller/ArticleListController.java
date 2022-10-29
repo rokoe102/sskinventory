@@ -47,14 +47,14 @@ public class ArticleListController implements Initializable {
             try {
                 articleTable.getItems().setAll(repo.findArticlesWithFilter(searchField.getText()));
             } catch (SQLException e) {
-                InventoryDialog dialog = new InventoryDialog("Fehler", e.getMessage());
+                InventoryDialog dialog = new InventoryDialog(InventoryDialog.ERROR, e.getMessage());
                 dialog.showInformation();
             }
         } else {
             try {
                 articleTable.getItems().setAll(repo.findAllArticles());
             } catch (SQLException e) {
-                InventoryDialog dialog = new InventoryDialog("Fehler", e.getMessage());
+                InventoryDialog dialog = new InventoryDialog(InventoryDialog.ERROR, e.getMessage());
                 dialog.showInformation();
             }
         }
@@ -68,7 +68,7 @@ public class ArticleListController implements Initializable {
                     try {
                         mainViewController.createArticleDetailTab(current);
                     } catch (IOException e) {
-                        InventoryDialog dialog = new InventoryDialog("Fehler", e.getMessage());
+                        InventoryDialog dialog = new InventoryDialog(InventoryDialog.ERROR, e.getMessage());
                         dialog.showInformation();
                     }
                 }
@@ -89,7 +89,7 @@ public class ArticleListController implements Initializable {
                 repo.deleteArticle(selection);
                 updateView();
             } catch (SQLException e) {
-                InventoryDialog dialog = new InventoryDialog("Fehler", "Löschen fehlgeschlagen", e.getMessage());
+                InventoryDialog dialog = new InventoryDialog(InventoryDialog.ERROR, "Löschen fehlgeschlagen", e.getMessage());
                 dialog.showInformation();
             }
         }

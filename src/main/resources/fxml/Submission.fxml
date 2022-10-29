@@ -7,20 +7,15 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.robinkoesters.sskinventory.controller.SubmissionController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.robinkoesters.sskinventory.controller.SubmissionController">
    <children>
-      <Label layoutX="244.0" layoutY="25.0" text="Auslieferung">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
-      <ComboBox fx:id="articleBox" layoutX="225.0" layoutY="79.0" onAction="#onSelection" prefWidth="150.0" />
-      <Label layoutX="152.0" layoutY="79.0" text="Artikel">
+      <ComboBox fx:id="articleBox" layoutX="225.0" layoutY="27.0" onAction="#onSelection" prefWidth="150.0" />
+      <Label layoutX="155.0" layoutY="27.0" text="Artikel">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <Button fx:id="queryButton" layoutX="387.0" layoutY="113.0" mnemonicParsing="false" onAction="#onQueryStarted" text="mitteilen" />
-      <TextField fx:id="amountField" layoutX="226.0" layoutY="113.0" onKeyTyped="#onTyped" promptText="Menge" />
+      <Button fx:id="queryButton" layoutX="386.0" layoutY="64.0" mnemonicParsing="false" onAction="#onQueryStarted" text="mitteilen" />
+      <TextField fx:id="amountField" layoutX="225.0" layoutY="64.0" onKeyTyped="#onTyped" promptText="Menge" />
    </children>
 </AnchorPane>

@@ -123,14 +123,11 @@ public class ArticleDetailController implements Initializable {
                     componentRepository.createNewAssignment(this.article, component.get(), amount);
                     updateView(this.article);
                 } catch (SQLException e) {
-                    throw new RuntimeException(e);
+                    InventoryDialog errorDialog = new InventoryDialog(InventoryDialog.ERROR, e.getMessage());
+                    errorDialog.showError();
                 }
             }
         }
-    }
-
-    @FXML
-    public void handleAssignmentSave() {
     }
 
     @FXML
@@ -169,9 +166,11 @@ public class ArticleDetailController implements Initializable {
                 }
             } else if (!article.isNewEntity()) {
                 try {
+                    String oldCaption = this.article.getIdentifier();
                     article = articleRepository.updateArticle(article, ident);
                     saveArticleButton.setVisible(false);
                     updateView(this.article);
+                    mainViewController.renameTab(oldCaption, article.getIdentifier());
                 } catch (SQLException sql) {
                     InventoryDialog dialog = new InventoryDialog(InventoryDialog.ERROR, "Änderung fehlgeschlagen", sql.getMessage());
                     dialog.showError();
@@ -186,14 +185,11 @@ public class ArticleDetailController implements Initializable {
     public boolean validateFields() {
         boolean success = true;
         if (identifierField.getText().equals("") || identifierField.getText() == null) {
-            InventoryDialog dialog = new InventoryDialog("Fehler", "Pflichtfeld nicht gefüllt", "Bitte Bezeichnung (Pflichtfeld) eingeben!");
+            InventoryDialog dialog = new InventoryDialog(InventoryDialog.ERROR, "Pflichtfeld nicht gefüllt", "Bitte Bezeichnung (Pflichtfeld) eingeben!");
             dialog.showError();
             success = false;
         }
         return success;
-    }
-
-    public void showSaveDialog() {
     }
 
     @FXML
@@ -202,7 +198,8 @@ public class ArticleDetailController implements Initializable {
             try {
                 ComponentExcelExport.exportComponentsForArticle(article);
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                InventoryDialog errorDialog = new InventoryDialog(InventoryDialog.ERROR, e.getMessage());
+                errorDialog.showError();
             }
         }
     }
