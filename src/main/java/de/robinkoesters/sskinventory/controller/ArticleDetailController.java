@@ -53,25 +53,22 @@ public class ArticleDetailController implements Initializable {
     }
 
     private void defineDoubleClickEvent() {
-        assignmentList.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent click) {
-                if (click.getClickCount() == 2) {
-                    String currentComponent = assignmentList.getSelectionModel().getSelectedItem().getComponent();
-                    Component current = null;
+        assignmentList.setOnMouseClicked(click -> {
+            if (click.getClickCount() == 2) {
+                String currentComponent = assignmentList.getSelectionModel().getSelectedItem().getComponent();
+                Component current = null;
+                try {
+                    current = componentRepository.findComponentByIdentifier(currentComponent);
+                } catch (SQLException sql) {
+                    InventoryDialog dialog = new InventoryDialog(InventoryDialog.ERROR, "Fehler beim Laden", sql.getMessage());
+                    dialog.showError();
+                }
+                if (current != null && !mainViewController.isTabAlreadyOpen(current.getIdentifier())) {
                     try {
-                        current = componentRepository.findComponentByIdentifier(currentComponent);
-                    } catch (SQLException sql) {
-                        InventoryDialog dialog = new InventoryDialog("Fehler", "Fehler beim Laden", sql.getMessage());
+                        mainViewController.createComponentDetailTab(current);
+                    } catch (IOException e) {
+                        InventoryDialog dialog = new InventoryDialog(InventoryDialog.ERROR, "Fehler beim Öffnen", e.getMessage());
                         dialog.showError();
-                    }
-                    if (current != null && !mainViewController.isTabAlreadyOpen(current.getIdentifier())) {
-                        try {
-                            mainViewController.createComponentDetailTab(current);
-                        } catch (IOException e) {
-                            InventoryDialog dialog = new InventoryDialog("Fehler", "Fehler beim Öffnen", e.getMessage());
-                            dialog.showError();
-                        }
                     }
                 }
             }
@@ -123,10 +120,10 @@ public class ArticleDetailController implements Initializable {
                 updateView(this.article);
                 hideSaveDialog();
             } catch (IllegalArgumentException nfe) {
-                InventoryDialog dialog = new InventoryDialog("Fehler", "Bitte eine natürliche Zahl größer 0 als Menge eingeben!");
+                InventoryDialog dialog = new InventoryDialog(InventoryDialog.ERROR, "Bitte eine natürliche Zahl größer 0 als Menge eingeben!");
                 dialog.showError();
             } catch (SQLException sql) {
-                InventoryDialog dialog = new InventoryDialog("Fehler", "Speichern fehlgeschlagen", sql.getMessage());
+                InventoryDialog dialog = new InventoryDialog(InventoryDialog.ERROR, "Speichern fehlgeschlagen", sql.getMessage());
                 dialog.showError();
             }
         }

@@ -6,6 +6,7 @@ import de.robinkoesters.sskinventory.entity.ComponentAssignment;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -119,10 +120,27 @@ public class ComponentRepository extends Repository {
         return list;
     }
 
-    public ObservableList<Component> findComponentsWithFilter(String searchString) throws SQLException {
+    public ObservableList<Component> findComponentsWithFilter(String id,
+                                                              Integer articleNo,
+                                                              String amountOperator,
+                                                              Integer amount) throws SQLException {
         ObservableList<Component> list = FXCollections.observableArrayList();
-        PreparedStatement stmnt = conn.prepareStatement("SELECT * FROM COMPONENT c where LOWER(c.identifier) LIKE ?");
-        stmnt.setString(1, "%" + searchString.toLowerCase() + "%");
+
+        String query = "SELECT * FROM COMPONENT c" +
+                       "         WHERE (LOWER(c.identifier) LIKE ? OR ? IS NULL) AND " +
+                       "               (c.number = ? OR ? IS NULL) AND " +
+                       "               (c.amount " + amountOperator + " ? OR ? IS NULL)";
+
+        PreparedStatement stmnt = conn.prepareStatement(query);
+        stmnt.setString(1, id.equals("") ? null : "%" + id.toLowerCase() + "%");
+        stmnt.setString(2, id.equals("") ? null : "%" + id.toLowerCase() + "%");
+
+        stmnt.setBigDecimal(3, articleNo == null ? null : BigDecimal.valueOf(articleNo));
+        stmnt.setBigDecimal(4, articleNo == null ? null : BigDecimal.valueOf(articleNo));
+        stmnt.setBigDecimal(5, amount == null ? null : BigDecimal.valueOf(amount));
+        stmnt.setBigDecimal(6, amount == null ? null : BigDecimal.valueOf(amount));
+
+
         ResultSet rs = stmnt.executeQuery();
         while (rs.next()) {
             list.add(new Component(rs.getString("identifier"), rs.getInt("number"), rs.getInt("amount")));

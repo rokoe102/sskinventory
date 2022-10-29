@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
@@ -20,7 +21,8 @@ public class ArticleListController implements Initializable {
     private MainViewController mainViewController;
     private ArticleRepository repo;
 
-    @FXML private ListView<Article> articleList;
+    @FXML private TableView<Article> articleTable;
+    @FXML private TableColumn<Article, String> idCol;
     @FXML private Button addButton;
     @FXML private Button deleteButton;
     @FXML private Button searchButton;
@@ -35,20 +37,22 @@ public class ArticleListController implements Initializable {
         repo = new ArticleRepository();
         defineDoubleClickEvent();
         updateView();
+
+        idCol.setCellValueFactory(new PropertyValueFactory<>("identifier"));
     }
 
     public void updateView() {
         repo = new ArticleRepository();
         if (searchField.getText() != null && !searchField.getText().equals("")) {
             try {
-                articleList.getItems().setAll(repo.findArticlesWithFilter(searchField.getText()));
+                articleTable.getItems().setAll(repo.findArticlesWithFilter(searchField.getText()));
             } catch (SQLException e) {
                 InventoryDialog dialog = new InventoryDialog("Fehler", e.getMessage());
                 dialog.showInformation();
             }
         } else {
             try {
-                articleList.getItems().setAll(repo.findAllArticles());
+                articleTable.getItems().setAll(repo.findAllArticles());
             } catch (SQLException e) {
                 InventoryDialog dialog = new InventoryDialog("Fehler", e.getMessage());
                 dialog.showInformation();
@@ -57,18 +61,15 @@ public class ArticleListController implements Initializable {
     }
 
     private void defineDoubleClickEvent() {
-        articleList.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent click) {
-                if (click.getClickCount() == 2) {
-                    Article current = articleList.getSelectionModel().getSelectedItem();
-                    if (current != null && !mainViewController.isTabAlreadyOpen(current.getIdentifier())) {
-                        try {
-                            mainViewController.createArticleDetailTab(current);
-                        } catch (IOException e) {
-                            InventoryDialog dialog = new InventoryDialog("Fehler", e.getMessage());
-                            dialog.showInformation();
-                        }
+        articleTable.setOnMouseClicked(click -> {
+            if (click.getClickCount() == 2) {
+                Article current = articleTable.getSelectionModel().getSelectedItem();
+                if (current != null && !mainViewController.isTabAlreadyOpen(current.getIdentifier())) {
+                    try {
+                        mainViewController.createArticleDetailTab(current);
+                    } catch (IOException e) {
+                        InventoryDialog dialog = new InventoryDialog("Fehler", e.getMessage());
+                        dialog.showInformation();
                     }
                 }
             }
@@ -82,7 +83,7 @@ public class ArticleListController implements Initializable {
 
     @FXML
     public void onDeletion() {
-        Article selection = articleList.getSelectionModel().getSelectedItem();
+        Article selection = articleTable.getSelectionModel().getSelectedItem();
         if (selection != null) {
             try {
                 repo.deleteArticle(selection);

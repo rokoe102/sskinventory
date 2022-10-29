@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class SettingsController implements Initializable {
@@ -19,9 +20,6 @@ public class SettingsController implements Initializable {
     private SettingsRepository settingsRepository;
 
     @FXML private Button dbResetDialogButton;
-    @FXML private Label question;
-    @FXML private Button dbResetButton;
-    @FXML private Button abortButton;
 
     public void setMainViewController(MainViewController mainViewController) {
         this.mainViewController = mainViewController;
@@ -30,9 +28,6 @@ public class SettingsController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         settingsRepository = new SettingsRepository();
-        question.setVisible(false);
-        dbResetButton.setVisible(false);
-        abortButton.setVisible(false);
         updateView();
     }
 
@@ -40,32 +35,19 @@ public class SettingsController implements Initializable {
     }
 
     @FXML
-    public void onDbResetDialogTriggered() {
-        question.setVisible(true);
-        dbResetButton.setVisible(true);
-        abortButton.setVisible(true);
-    }
-
-    @FXML
     public void onDbReset() {
         try {
-            settingsRepository.resetDatabase();
-            question.setVisible(false);
-            dbResetButton.setVisible(false);
-            abortButton.setVisible(false);
+            InventoryDialog dialog = new InventoryDialog(InventoryDialog.INFO,  "", "Sind Sie sicher?");
+            Optional<ButtonType> answer = dialog.showConfirmation();
+            if (answer.isPresent() && answer.get().getButtonData().isDefaultButton()) {
+                settingsRepository.resetDatabase();
+
+                InventoryDialog info = new InventoryDialog(InventoryDialog.INFO, "Datenbank erfolgreich zurückgesetzt!");
+                info.showInformation();
+            }
         } catch (SQLException e) {
-            InventoryDialog dialog = new InventoryDialog("Fehler", "Fehler beim Zurücksetzen", e.getMessage());
+            InventoryDialog dialog = new InventoryDialog(InventoryDialog.ERROR, "Fehler beim Zurücksetzen", e.getMessage());
             dialog.showError();
         }
-
-        InventoryDialog dialog = new InventoryDialog("Information", "Datenbank erfolgreich zurückgesetzt!");
-        dialog.showInformation();
-    }
-
-    @FXML
-    public void onAbort() {
-        question.setVisible(false);
-        dbResetButton.setVisible(false);
-        abortButton.setVisible(false);
     }
 }

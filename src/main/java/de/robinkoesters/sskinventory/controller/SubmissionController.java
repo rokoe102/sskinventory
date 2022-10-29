@@ -39,7 +39,7 @@ public class SubmissionController implements Initializable {
             queryButton.setDisable(true);
         } catch (SQLException e) {
             LOGGER.error(e.getMessage(), e);
-            InventoryDialog dialog = new InventoryDialog("Fehler", e.getMessage());
+            InventoryDialog dialog = new InventoryDialog(InventoryDialog.ERROR, e.getMessage());
             dialog.showError();
         }
 
@@ -69,11 +69,11 @@ public class SubmissionController implements Initializable {
 
                 String info = availabilityRepository.getSubmissionInfo(article, amount);
 
-                InventoryDialog dialog = new InventoryDialog("Ergebnis", info);
+                InventoryDialog dialog = new InventoryDialog(InventoryDialog.RESULT, info);
                 dialog.showResult();
             } catch (SQLException e) {
                 LOGGER.error(e.getMessage(), e);
-                InventoryDialog dialog = new InventoryDialog("Fehler", e.getMessage());
+                InventoryDialog dialog = new InventoryDialog(InventoryDialog.ERROR, e.getMessage());
                 dialog.showError();
             }
         }
@@ -85,7 +85,7 @@ public class SubmissionController implements Initializable {
             Integer.parseInt(amountField.getText());
         } catch (NumberFormatException nfe) {
             success = false;
-            InventoryDialog dialog = new InventoryDialog("Fehler", "Bitte natürliche Zahl für Menge eingeben!");
+            InventoryDialog dialog = new InventoryDialog(InventoryDialog.ERROR, "Bitte natürliche Zahl für Menge eingeben!");
             dialog.showError();
         }
         return success;

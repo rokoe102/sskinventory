@@ -2,10 +2,17 @@ package de.robinkoesters.sskinventory.dialogs;
 
 import de.robinkoesters.sskinventory.SSKInventory;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 
+import java.util.Optional;
+
 public class InventoryDialog {
+
+    public static String ERROR = "Fehler";
+    public static String INFO = "Information";
+    public static String RESULT = "Ergebnis";
 
     private String title;
     private String header;
@@ -52,5 +59,14 @@ public class InventoryDialog {
         alert.setContentText(content);
         alert.initOwner(SSKInventory.getMainStage());
         alert.show();
+    }
+
+    public Optional<ButtonType> showConfirmation() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.initOwner(SSKInventory.getMainStage());
+        return alert.showAndWait();
     }
 }

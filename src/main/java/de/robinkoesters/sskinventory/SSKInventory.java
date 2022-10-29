@@ -21,12 +21,13 @@ public class SSKInventory extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+
         setMainStage(stage);
         stage.setTitle("SSKInventory");
         stage.getIcons().add(new Image("file:icon.png"));
         FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/fxml/MainView.fxml"));
         Parent mainPane = mainLoader.load();
-        Scene mainScene = new Scene(mainPane, 600, 450);
+        Scene mainScene = new Scene(mainPane, 600, 475);
 
         MainViewController mvcontroller = mainLoader.getController();
         mvcontroller.prepareTabs();

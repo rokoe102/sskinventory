@@ -5,6 +5,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
@@ -28,6 +30,14 @@
       <Button fx:id="saveButton" layoutX="517.0" layoutY="140.0" mnemonicParsing="false" onAction="#handleAssignmentSave" text="Speichern" />
       <TextField fx:id="amountField" layoutX="451.0" layoutY="140.0" prefHeight="25.0" prefWidth="58.0" promptText="Menge" />
       <Button fx:id="saveArticleButton" layoutX="459.0" layoutY="31.0" mnemonicParsing="false" onAction="#handleArticleUpdate" text="Speichern" />
-      <Button fx:id="excelExportButton" layoutX="99.0" layoutY="353.0" mnemonicParsing="false" onAction="#onExcelExportPerformed" text="Excel-Export" />
+      <Button fx:id="excelExportButton" layoutX="85.0" layoutY="346.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#onExcelExportPerformed" prefHeight="20.0" prefWidth="110.0" text="Excel-Export">
+         <graphic>
+            <ImageView fitHeight="${excelExportButton.prefHeight}" fitWidth="${excelExportButton.prefWidth}" preserveRatio="true">
+               <image>
+                  <Image url="@../export_excel.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
    </children>
 </AnchorPane>
