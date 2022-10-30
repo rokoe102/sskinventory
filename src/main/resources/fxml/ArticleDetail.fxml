@@ -2,35 +2,30 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.robinkoesters.sskinventory.controller.ArticleDetailController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.robinkoesters.sskinventory.controller.ArticleDetailController">
    <children>
-      <TableView fx:id="assignmentTable" layoutX="74.0" layoutY="182.0" prefHeight="200.0" prefWidth="450.0">
+      <TableView fx:id="assignmentTable" layoutX="79.0" layoutY="236.0" prefHeight="200.0" prefWidth="450.0">
         <columns>
           <TableColumn fx:id="idCol" prefWidth="213.60003662109375" text="Bezeichnung" />
           <TableColumn fx:id="amountCol" minWidth="1.5999755859375" prefWidth="62.39996337890625" text="Stückzahl" />
         </columns>
       </TableView>
-      <TextField fx:id="identifierField" layoutX="263.0" layoutY="31.0" onKeyTyped="#handleTyping" prefHeight="26.0" prefWidth="181.0" />
-      <Label layoutX="140.0" layoutY="30.0" text="Bezeichnung">
+      <Label layoutX="207.0" layoutY="147.0" text="zugeordnete Komponenten">
          <font>
-            <Font size="18.0" />
+            <Font size="16.0" />
          </font>
       </Label>
-      <Label layoutX="190.0" layoutY="84.0" text="zugeordnete Komponenten">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <Button fx:id="saveArticleButton" layoutX="459.0" layoutY="31.0" mnemonicParsing="false" onAction="#handleArticleUpdate" text="Speichern" />
-      <Button fx:id="excelExportButton" layoutX="235.0" layoutY="134.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#onExcelExportPerformed" prefHeight="20.0" prefWidth="110.0" text="Excel-Export">
+      <Button fx:id="excelExportButton" layoutX="235.0" layoutY="185.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#onExcelExportPerformed" prefHeight="20.0" prefWidth="110.0" text="Excel-Export">
          <graphic>
             <ImageView fitHeight="${excelExportButton.prefHeight}" fitWidth="${excelExportButton.prefWidth}" preserveRatio="true">
                <image>
@@ -39,7 +34,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="addButton" layoutX="74.0" layoutY="134.0" maxHeight="20.0" maxWidth="70.0" mnemonicParsing="false" onAction="#onAddition" prefHeight="20.0" prefWidth="70.0" text="Neu">
+      <Button fx:id="addButton" layoutX="75.0" layoutY="185.0" maxHeight="20.0" maxWidth="70.0" mnemonicParsing="false" onAction="#onAddition" prefHeight="20.0" prefWidth="70.0" text="Neu">
          <graphic>
             <ImageView fitHeight="${addButton.prefHeight}" fitWidth="${addButton.prefWidth}" preserveRatio="true">
                <image>
@@ -48,7 +43,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="deleteButton" layoutX="145.0" layoutY="134.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#onDeletion" prefHeight="20.0" prefWidth="90.0" text="Löschen">
+      <Button fx:id="deleteButton" layoutX="145.0" layoutY="185.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#onDeletion" prefHeight="20.0" prefWidth="90.0" text="Löschen">
          <graphic>
             <ImageView fitHeight="${deleteButton.prefHeight}" fitWidth="${deleteButton.prefWidth}" preserveRatio="true">
                <image>
@@ -57,5 +52,29 @@
             </ImageView>
          </graphic>
       </Button>
+      <Separator layoutX="75.0" layoutY="137.0" prefHeight="1.0" prefWidth="450.0" />
+      <TitledPane collapsible="false" layoutX="73.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="75.0" prefWidth="425.0" text="Artikel">
+         <content>
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="425.0">
+               <children>
+                  <TextField fx:id="identifierField" layoutX="112.0" layoutY="25.0" onKeyTyped="#handleTyping" prefHeight="20.0" prefWidth="206.0" />
+                  <Label layoutX="14.0" layoutY="25.0" text="Bezeichnung">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="saveArticleButton" layoutX="330.0" layoutY="25.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleArticleUpdate" prefHeight="20.0" prefWidth="110.0" text="Speichern">
+                     <graphic>
+                        <ImageView fitHeight="${saveArticleButton.prefHeight}" fitWidth="${saveArticleButton.prefWidth}" preserveRatio="true">
+                           <image>
+                              <Image url="@../save.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+            </AnchorPane>
+         </content>
+      </TitledPane>
    </children>
 </AnchorPane>

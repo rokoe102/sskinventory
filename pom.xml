@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.robinkoesters</groupId>
 	<artifactId>sskinventory</artifactId>
-	<version>DEVELOP-SNAPSHOT</version>
+	<version>1.6.0</version>
 	<name>sskinventory</name>
 	<description>Software to manage inventory</description>
 	<properties>

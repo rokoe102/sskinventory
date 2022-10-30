@@ -12,54 +12,54 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.robinkoesters.sskinventory.controller.ComponentDetailController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.robinkoesters.sskinventory.controller.ComponentDetailController">
    <children>
-      <TitledPane collapsible="false" layoutX="92.0" layoutY="16.0" prefHeight="139.0" prefWidth="380.0" text="Komponente">
+      <TitledPane collapsible="false" layoutX="75.0" layoutY="20.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="139.0" prefWidth="450.0" text="Komponente">
          <content>
-            <AnchorPane prefHeight="141.0" prefWidth="371.0">
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="141.0" prefWidth="450.0">
                <children>
-                  <Label layoutX="69.0" layoutY="11.0" text="Bezeichnung">
+                  <Label layoutX="35.0" layoutY="11.0" text="Bezeichnung">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="identifierField" layoutX="199.0" layoutY="11.0" onKeyTyped="#handleIdentifierTyping" />
-                  <Label layoutX="80.0" layoutY="95.0" text="Stückzahl">
+                  <TextField fx:id="identifierField" layoutX="154.0" layoutY="14.0" onKeyTyped="#handleIdentifierTyping" />
+                  <Label layoutX="47.0" layoutY="95.0" text="Stückzahl">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="amountField" layoutX="199.0" layoutY="95.0" onKeyTyped="#handleAmountTyping" />
-                  <Label layoutX="61.0" layoutY="51.0" text="Artikelnummer">
+                  <TextField fx:id="amountField" layoutX="154.0" layoutY="95.0" onKeyTyped="#handleAmountTyping" />
+                  <Label layoutX="35.0" layoutY="51.0" text="Artikelnummer">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="numberField" layoutX="199.0" layoutY="51.0" onKeyTyped="#handleArticleNoTyping" />
+                  <TextField fx:id="numberField" layoutX="154.0" layoutY="51.0" onKeyTyped="#handleArticleNoTyping" />
+                  <Button fx:id="saveComponentButton" layoutX="313.0" layoutY="88.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleComponentUpdate" prefHeight="20.0" prefWidth="110.0" text="Speichern">
+                     <graphic>
+                        <ImageView fitHeight="${saveComponentButton.prefHeight}" fitWidth="${saveComponentButton.prefWidth}" preserveRatio="true">
+                           <image>
+                              <Image url="@../save.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
                </children>
             </AnchorPane>
          </content>
       </TitledPane>
-      <Label layoutX="221.0" layoutY="200.0" text="zugeordnete Artikel">
+      <Label layoutX="230.0" layoutY="205.0" text="zugeordnete Artikel">
          <font>
-            <Font size="18.0" />
+            <Font size="16.0" />
          </font>
       </Label>
-      <TableView fx:id="assignmentTable" layoutX="91.0" layoutY="236.0" prefHeight="200.0" prefWidth="380.0">
+      <TableView fx:id="assignmentTable" layoutX="75.0" layoutY="236.0" prefHeight="200.0" prefWidth="450.0">
         <columns>
           <TableColumn fx:id="idCol" prefWidth="182.4000244140625" text="Bezeichnung" />
           <TableColumn fx:id="amountCol" prefWidth="158.39996337890625" text="benötigte Komponenten" />
         </columns>
       </TableView>
-      <Button fx:id="saveComponentButton" layoutX="478.0" layoutY="143.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleComponentUpdate" prefHeight="20.0" prefWidth="110.0" text="Speichern">
-         <graphic>
-            <ImageView fitHeight="${saveComponentButton.prefHeight}" fitWidth="${saveComponentButton.prefWidth}" preserveRatio="true">
-               <image>
-                  <Image url="@../save.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
-      <Separator layoutX="91.0" layoutY="194.0" prefHeight="10.0" prefWidth="380.0" />
+      <Separator layoutX="75.0" layoutY="198.0" prefHeight="7.0" prefWidth="450.0" />
    </children>
 </AnchorPane>

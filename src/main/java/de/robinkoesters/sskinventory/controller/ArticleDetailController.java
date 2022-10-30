@@ -83,6 +83,7 @@ public class ArticleDetailController implements Initializable {
             this.article = updated;
         }
         this.identifierField.setText(article.getIdentifier());
+        this.identifierField.setStyle("-fx-text-fill: white;");
 
         if (article.isNewEntity()) {
             assignmentTable.setDisable(true);
@@ -147,6 +148,7 @@ public class ArticleDetailController implements Initializable {
     @FXML
     public void handleTyping() {
         saveArticleButton.setVisible(true);
+        identifierField.setStyle("-fx-text-fill: aqua;");
     }
 
     @FXML
